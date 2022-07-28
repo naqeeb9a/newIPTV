@@ -14,7 +14,7 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: chanelsListView());
+    return Scaffold(backgroundColor: Colors.blue, body: chanelsListView());
   }
 
   Widget chanelsListView() {
@@ -27,22 +27,34 @@ class DetailPage extends StatelessWidget {
         ],
       );
     }
-    return GridView.builder(
-      itemCount: playList!.length,
-      itemBuilder: (BuildContext context, int index) {
-        M3uGenericEntry value = playList![index];
-        return InkWell(
-          onTap: () {
-            KRoutes.push(context, PlayerScreen(link: value.link));
-          },
-          child: Center(
+    return Container(
+      decoration:
+          BoxDecoration(color: kWhite, borderRadius: BorderRadius.circular(20)),
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(20),
+      child: GridView.builder(
+        itemCount: playList!.length,
+        itemBuilder: (BuildContext context, int index) {
+          M3uGenericEntry value = playList![index];
+          return InkWell(
+            onTap: () {
+              KRoutes.push(context, PlayerScreen(link: value.link));
+            },
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  decoration:
-                      const BoxDecoration(shape: BoxShape.circle, color: kGrey),
+                  decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: kWhite,
+                      boxShadow: [
+                        BoxShadow(
+                            offset: Offset(1, 2),
+                            spreadRadius: 2,
+                            blurRadius: 2,
+                            color: kGrey)
+                      ]),
                   padding: const EdgeInsets.all(20),
                   alignment: Alignment.center,
                   width: 100,
@@ -60,7 +72,12 @@ class DetailPage extends StatelessWidget {
                       return const CircularProgressIndicator();
                     },
                     errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.error_outline);
+                      return const CustomText(
+                        text: "Unable to load Image",
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        fontsize: 10,
+                      );
                     },
                     width: 100,
                   ),
@@ -75,11 +92,14 @@ class DetailPage extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        );
-      },
-      gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          );
+        },
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            childAspectRatio: 16 / 25,
+            mainAxisSpacing: 20,
+            crossAxisSpacing: 20),
+      ),
     );
   }
 }

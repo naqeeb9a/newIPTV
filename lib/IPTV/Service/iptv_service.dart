@@ -8,7 +8,7 @@ import 'package:m3u_nullsafe/m3u_nullsafe.dart';
 class IPTVService {
   static getChannels() async {
     try {
-      Uri url = Uri.parse("https://iptv-org.github.io/iptv/countries/pk.m3u");
+      Uri url = Uri.parse("https://iptv-org.github.io/iptv/index.nsfw.m3u");
       http.Response response = await http.get(url);
       if (response.statusCode == 200) {
         return Success(200, await yieldCategories(response.body));

@@ -1,7 +1,9 @@
 import 'package:bwciptv/IPTV/ViewModel/iptv_model_view.dart';
 import 'package:bwciptv/IPTV/Views/detail_page.dart';
+import 'package:bwciptv/IPTV/Views/drawer.dart';
 import 'package:bwciptv/Widgets/custom_text.dart';
 import 'package:bwciptv/utils/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 import 'package:lottie/lottie.dart';
@@ -9,6 +11,8 @@ import 'package:provider/provider.dart';
 // ignore: depend_on_referenced_packages
 import '../../Widgets/custom_app_bar.dart';
 import '../../Widgets/custom_loader.dart';
+
+final GlobalKey<ScaffoldState> _key = GlobalKey();
 
 class CategoriesListView extends StatelessWidget {
   const CategoriesListView({Key? key}) : super(key: key);
@@ -18,7 +22,35 @@ class CategoriesListView extends StatelessWidget {
     IPTVModelView iptvModelView = context.watch<IPTVModelView>();
     return SafeArea(
         child: Scaffold(
-            backgroundColor: kWhite, body: categoriesView(iptvModelView)));
+            key: _key,
+            drawerEnableOpenDragGesture: false,
+            appBar: BaseAppBar(
+                title: "IPTV",
+                appBar: AppBar(),
+                automaticallyImplyLeading: true,
+                leading: IconButton(
+                  icon: const Icon(
+                    CupertinoIcons.line_horizontal_3,
+                  ),
+                  onPressed: () => _key.currentState!.openDrawer(),
+                ),
+                widgets: [
+                  Row(
+                    children: const [
+                      Icon(
+                        CupertinoIcons.heart,
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                    ],
+                  )
+                ],
+                appBarHeight: 50),
+            drawer: const Drawer(
+              child: CustomDrawer(),
+            ),
+            body: categoriesView(iptvModelView)));
   }
 
   Widget categoriesView(IPTVModelView iptvModelView) {
@@ -64,7 +96,10 @@ class CategoriesListView extends StatelessWidget {
     List<Tab> tabs = [];
     for (String element in iptvModelView.playList.keys.toList()) {
       tabs.add(Tab(
-        child: CustomText(text: element),
+        child: CustomText(
+          text: element,
+          color: kWhite,
+        ),
       ));
     }
     return DefaultTabController(

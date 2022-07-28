@@ -23,6 +23,7 @@ class BaseAppBar extends StatelessWidget with PreferredSizeWidget {
       this.automaticallyImplyLeading = false,
       this.backgroundColor = Colors.transparent,
       this.centerTitle = true,
+      drawerEnableOpenDragGesture = false,
       required this.appBarHeight,
       this.bottom,
       this.leading})
@@ -30,31 +31,28 @@ class BaseAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          title,
-          style: const TextStyle(color: Colors.black),
-        ),
-        automaticallyImplyLeading: automaticallyImplyLeading,
-        centerTitle: true,
-        leading: automaticallyImplyLeading == false
-            ? null
-            : leading ??
-                InkWell(
-                  onTap: () => KRoutes.pop(context),
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    size: 15,
-                    color: primaryColor,
-                  ),
-                ),
-        actions: widgets,
-        bottom: bottom,
+    return AppBar(
+      // backgroundColor: Colors.transparent,
+      elevation: 0,
+      title: Text(
+        title,
+        style: const TextStyle(color: kWhite),
       ),
+      automaticallyImplyLeading: automaticallyImplyLeading,
+      centerTitle: true,
+      leading: automaticallyImplyLeading == false
+          ? null
+          : leading ??
+              InkWell(
+                onTap: () => KRoutes.pop(context),
+                child: const Icon(
+                  Icons.arrow_back_ios,
+                  size: 15,
+                  color: primaryColor,
+                ),
+              ),
+      actions: widgets,
+      bottom: bottom,
     );
   }
 

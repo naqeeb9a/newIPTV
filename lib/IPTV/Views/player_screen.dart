@@ -1,4 +1,5 @@
 import 'package:better_player/better_player.dart';
+import 'package:bwciptv/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class PlayerScreen extends StatelessWidget {
@@ -7,21 +8,19 @@ class PlayerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(link);
     return Scaffold(
+      backgroundColor: kblack,
       body: SafeArea(
-        child: AspectRatio(
-          aspectRatio: 16 / 9,
-          child: BetterPlayer.network(
-            link,
-            betterPlayerConfiguration: const BetterPlayerConfiguration(
-                aspectRatio: 16 / 9,
-                autoPlay: true,
-                controlsConfiguration: BetterPlayerControlsConfiguration(
-                    enableProgressBar: false,
-                    enableProgressText: true,
-                    enableSkips: false)),
-          ),
+        child: BetterPlayer.network(
+          link,
+          betterPlayerConfiguration: const BetterPlayerConfiguration(
+              fullScreenByDefault: true,
+              aspectRatio: 16 / 9,
+              autoPlay: true,
+              controlsConfiguration: BetterPlayerControlsConfiguration(
+                  enableProgressBar: false,
+                  enableProgressText: false,
+                  enableSkips: false)),
         ),
       ),
     );
