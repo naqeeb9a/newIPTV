@@ -1,4 +1,5 @@
-import 'package:bwciptv/IPTV/ViewModel/iptv_model_view.dart';
+import 'package:bwciptv/IPTV/ViewModel/FavouriteChannel/favourities.dart';
+import 'package:bwciptv/IPTV/ViewModel/IPTVModelView/iptv_model_view.dart';
 import 'package:bwciptv/Screens/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => IPTVModelView())],
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => IPTVModelView(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => FavouritiesModelView(),
+        ),
+      ],
       child: MaterialApp(
         title: 'IPTV',
         theme: ThemeData(

@@ -11,12 +11,14 @@ class CustomButton extends StatelessWidget {
   final VoidCallback function;
   final int? maxLines;
   final bool invert;
+  final double? fontsize;
   const CustomButton(
       {Key? key,
       required this.buttonColor,
       required this.text,
       this.textAlign,
       this.maxLines,
+      this.fontsize,
       this.textColor = Colors.black,
       required this.function,
       this.invert = false})
@@ -41,6 +43,7 @@ class CustomButton extends StatelessWidget {
           color: textColor,
           textAlign: textAlign,
           maxLines: maxLines,
+          fontsize:fontsize ,
         ),
       ),
     );

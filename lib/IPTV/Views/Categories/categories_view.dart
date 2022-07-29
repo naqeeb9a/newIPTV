@@ -1,16 +1,16 @@
-import 'package:bwciptv/IPTV/ViewModel/iptv_model_view.dart';
-import 'package:bwciptv/IPTV/Views/detail_page.dart';
-import 'package:bwciptv/IPTV/Views/drawer.dart';
-import 'package:bwciptv/Widgets/custom_text.dart';
+import 'package:bwciptv/IPTV/ViewModel/IPTVModelView/iptv_model_view.dart';
+import 'package:bwciptv/IPTV/Views/DetailPage/detail_page.dart';
+import 'package:bwciptv/IPTV/Views/Drawer/drawer.dart';
+import 'package:bwciptv/IPTV/Views/FavoriteChannels/favourites.dart';
+import 'package:bwciptv/Widgets/widget.dart';
+import 'package:bwciptv/utils/app_routes.dart';
 import 'package:bwciptv/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-// ignore: depend_on_referenced_packages
-import '../../Widgets/custom_app_bar.dart';
-import '../../Widgets/custom_loader.dart';
+import '../../../Widgets/custom_loader.dart';
 
 final GlobalKey<ScaffoldState> _key = GlobalKey();
 
@@ -35,20 +35,27 @@ class CategoriesListView extends StatelessWidget {
                   onPressed: () => _key.currentState!.openDrawer(),
                 ),
                 widgets: [
-                  Row(
-                    children: const [
-                      Icon(
-                        CupertinoIcons.heart,
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                    ],
+                  GestureDetector(
+                    onTap: () {
+                      KRoutes.push(context, const Favourities());
+                    },
+                    child: Row(
+                      children: const [
+                        Icon(
+                          CupertinoIcons.heart,
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                      ],
+                    ),
                   )
                 ],
                 appBarHeight: 50),
-            drawer: const Drawer(
-              child: CustomDrawer(),
+            drawer: Drawer(
+              child: CustomDrawer(
+                iptvModelView: iptvModelView,
+              ),
             ),
             body: categoriesView(iptvModelView)));
   }
@@ -78,8 +85,44 @@ class CategoriesListView extends StatelessWidget {
       );
     }
     if (iptvModelView.modelError != null) {
-      return CustomText(
-          text: iptvModelView.modelError!.errorResponse.toString());
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            LottieBuilder.asset(
+              "assets/error.json",
+              width: 300,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            CustomText(
+              text: iptvModelView.modelError!.errorResponse.toString(),
+              fontsize: 15,
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            const CustomText(
+              text: "Check the link or try again",
+              fontsize: 15,
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            CustomButton(
+              buttonColor: primaryColor,
+              text: "Try again",
+              fontsize: 18,
+              function: () {
+                iptvModelView.setModelError(null);
+                iptvModelView.getChannelsList();
+              },
+              textColor: kWhite,
+            )
+          ],
+        ),
+      );
     }
     if (iptvModelView.playList.isEmpty) {
       return Column(
@@ -119,8 +162,10 @@ class CategoriesListView extends StatelessWidget {
           body: TabBarView(
               children: iptvModelView.playList.keys
                   .toList()
-                  .map((value) =>
-                      DetailPage(playList: iptvModelView.playList[value]))
+                  .map((value) => DetailPage(
+                        playList: iptvModelView.playList[value],
+                        categoryName: value,
+                      ))
                   .toList())),
     );
   }

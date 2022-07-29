@@ -4,7 +4,7 @@ class CustomText extends StatelessWidget {
   final String text;
   final Color color;
   final FontWeight fontWeight;
-  final double fontsize;
+  final double? fontsize;
   final int? maxLines;
   final TextAlign? textAlign;
   const CustomText(

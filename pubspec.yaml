@@ -39,6 +39,8 @@ dependencies:
   provider: ^6.0.3
   better_player: ^0.0.83
   jumping_dot: ^0.0.4
+  shared_preferences: ^2.0.15
+  file_picker: ^5.0.0
 
 dev_dependencies:
   flutter_test:

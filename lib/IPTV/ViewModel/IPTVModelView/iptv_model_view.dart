@@ -27,7 +27,7 @@ class IPTVModelView extends ChangeNotifier {
     _playList = playList;
   }
 
-  setModelError(ModelError modelError) {
+  setModelError(ModelError? modelError) {
     _modelError = modelError;
   }
 
@@ -39,6 +39,19 @@ class IPTVModelView extends ChangeNotifier {
     }
     if (response is Failure) {
       ModelError modelError = ModelError(response.code, response.errorResponse);
+      setModelError(modelError);
+    }
+    setLoading(false);
+  }
+
+  getChannelsListStorage(String path) async {
+    setLoading(true);
+    var response = await IPTVService.getChannelsStorage(path);
+    if (response is Success) {
+      setPostModelList(response.response as Map<String, List<M3uGenericEntry>>);
+    }
+    if (response is Failure) {
+      ModelError modelError = ModelError(102, "Invalid M3u File");
       setModelError(modelError);
     }
     setLoading(false);

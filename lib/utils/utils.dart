@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-const primaryColor = Color(0xFF37c6a5);
+const primaryColor = Colors.blue;
 const kblack = Colors.black;
 const kWhite = Colors.white;
 const kGrey = Colors.grey;
 const ktransparent = Colors.transparent;
-dynamic userData;
-dynamic globalContext;
+String baseUrl = "https://iptv-org.github.io/iptv/countries/pk.m3u";
