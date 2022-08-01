@@ -21,6 +21,13 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blue,
+      appBar: BaseAppBar(
+        title: "Catalogue",
+        appBar: AppBar(),
+        widgets: const [],
+        appBarHeight: 50,
+        automaticallyImplyLeading: true,
+      ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           if (constraints.maxWidth > 900) {
@@ -82,7 +89,14 @@ class DetailPage extends StatelessWidget {
 
           return InkWell(
             onTap: () {
-              KRoutes.push(context, PlayerScreen(link: value.link));
+              KRoutes.push(
+                  context,
+                  PlayerScreen(
+                    link: value.link,
+                    title: value.title == ""
+                        ? "Unknown Channel ${index + 1}"
+                        : value.title,
+                  ));
             },
             child: Column(
               mainAxisSize: MainAxisSize.max,

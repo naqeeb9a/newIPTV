@@ -57,10 +57,10 @@ class CategoriesListView extends StatelessWidget {
                 iptvModelView: iptvModelView,
               ),
             ),
-            body: categoriesView(iptvModelView)));
+            body: categoriesView(iptvModelView, context)));
   }
 
-  Widget categoriesView(IPTVModelView iptvModelView) {
+  Widget categoriesView(IPTVModelView iptvModelView, BuildContext context) {
     if (iptvModelView.loading) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -136,37 +136,24 @@ class CategoriesListView extends StatelessWidget {
         ],
       );
     }
-    List<Tab> tabs = [];
-    for (String element in iptvModelView.playList.keys.toList()) {
-      tabs.add(Tab(
-        child: CustomText(
-          text: element,
-          color: kWhite,
-        ),
-      ));
-    }
-    return DefaultTabController(
-      length: iptvModelView.playList.keys.toList().length,
-      child: Scaffold(
-          appBar: BaseAppBar(
-            title: "",
-            appBar: AppBar(),
-            widgets: const [],
-            appBarHeight: 70,
-            bottom: TabBar(
-              isScrollable: true,
-              indicatorSize: TabBarIndicatorSize.label,
-              tabs: tabs,
-            ),
-          ),
-          body: TabBarView(
-              children: iptvModelView.playList.keys
-                  .toList()
-                  .map((value) => DetailPage(
-                        playList: iptvModelView.playList[value],
-                        categoryName: value,
-                      ))
-                  .toList())),
+
+    return SingleChildScrollView(
+      child: Column(
+          children: iptvModelView.playList.keys
+              .toList()
+              .map((value) => ListTile(
+                    title: CustomText(
+                      text: value == "" ? "Undefined" : value,
+                      fontsize: 15,
+                    ),
+                    onTap: () => KRoutes.push(
+                        context,
+                        DetailPage(
+                          playList: iptvModelView.playList[value],
+                          categoryName: value,
+                        )),
+                  ))
+              .toList()),
     );
   }
 }

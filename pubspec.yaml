@@ -41,6 +41,8 @@ dependencies:
   jumping_dot: ^0.0.4
   shared_preferences: ^2.0.15
   file_picker: ^5.0.0
+  flutter_vlc_player: ^7.1.5
+  audio_video_progress_bar: ^0.10.0
 
 dev_dependencies:
   flutter_test:
