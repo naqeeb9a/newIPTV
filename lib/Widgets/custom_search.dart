@@ -5,9 +5,14 @@ import 'package:bwciptv/utils/utils.dart';
 class CustomSearch extends StatelessWidget {
   final bool enabled;
   final TextEditingController? controller;
+  final String? searchText;
   final dynamic function;
   const CustomSearch(
-      {Key? key, this.enabled = true, this.controller, this.function})
+      {Key? key,
+      this.enabled = true,
+      this.controller,
+      this.function,
+      this.searchText})
       : super(key: key);
 
   @override
@@ -16,10 +21,13 @@ class CustomSearch extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 1, color: kGrey.withOpacity(0.3))),
+          border: Border.all(width: 1, color: primaryColor)),
       child: Row(
         children: [
-          const Icon(CupertinoIcons.search),
+          const Icon(
+            CupertinoIcons.search,
+            color: primaryColor,
+          ),
           const SizedBox(
             width: 10,
           ),
@@ -27,9 +35,10 @@ class CustomSearch extends StatelessWidget {
               child: TextField(
             enabled: enabled,
             controller: controller,
-            decoration: const InputDecoration(
-                hintText: "Search anything", border: InputBorder.none),
-            onSubmitted: (value) async {
+            decoration: InputDecoration(
+                hintText: searchText ?? "Search anything",
+                border: InputBorder.none),
+            onChanged: (value) async {
               await function();
             },
           ))

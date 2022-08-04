@@ -1,9 +1,15 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:bwciptv/IPTV/ViewModel/IPTVModelView/iptv_model_view.dart';
 import 'package:bwciptv/Widgets/widget.dart';
 import 'package:bwciptv/utils/app_routes.dart';
 import 'package:bwciptv/utils/utils.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:m3u_nullsafe/m3u_nullsafe.dart';
+import '../IPTV/ViewModel/FavouriteChannel/favourities_channel.dart';
 
 class Functionality {
   showDialogueLink(BuildContext context, TextEditingController? controller,
@@ -38,8 +44,8 @@ class Functionality {
                         baseUrl = controller!.text;
                         iptvModelView.setModelError(null);
                         iptvModelView.getChannelsList();
-                        KRoutes.pop(context);
-                        KRoutes.pop(context);
+                        KRoutes.rootPop(context);
+                        Fluttertoast.showToast(msg: "Playlist Loaded");
                       }),
                   const SizedBox(
                     height: 5,
@@ -60,8 +66,8 @@ class Functionality {
     }
 
     popScreens() {
-      KRoutes.pop(context);
-      KRoutes.pop(context);
+      KRoutes.rootPop(context);
+      Fluttertoast.showToast(msg: "PLaylist Loaded");
     }
 
     return showDialog(
@@ -109,5 +115,123 @@ class Functionality {
                 ],
               ),
             ));
+  }
+
+  showDialogueFav(BuildContext context, TextEditingController? controller,
+      M3uGenericEntry? item) {
+    Map favList =
+        Provider.of<FavouritiesModelView>(context, listen: false).favouriteList;
+    return favList.isEmpty
+        ? showAddingCategory(context, controller, item)
+        : showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const CustomText(text: "Select a category"),
+                      GestureDetector(
+                          onTap: () {
+                            showAddingCategory(context, controller, item);
+                          },
+                          child: const Icon(Icons.add))
+                    ],
+                  ),
+                  content: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: kblack.withOpacity(0.4)),
+                          borderRadius: BorderRadius.circular(20)),
+                      height: MediaQuery.of(context).size.height / 2,
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.separated(
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: CustomText(
+                                text:
+                                    "${index + 1} - ${favList.keys.toList()[index]}",
+                                fontsize: 18,
+                              ),
+                              onTap: () {
+                                Provider.of<FavouritiesModelView>(context,
+                                        listen: false)
+                                    .addToFavourities(
+                                  favList.keys.toList()[index],
+                                  item,
+                                );
+                                KRoutes.pop(context);
+                                Fluttertoast.showToast(
+                                    msg: "Added to favourites");
+                              },
+                              enableFeedback: true,
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return const Divider();
+                          },
+                          itemCount: favList.keys.toList().length)),
+                ));
+  }
+
+  showAddingCategory(
+    BuildContext context,
+    TextEditingController? controller,
+    M3uGenericEntry? item,
+  ) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const CustomText(text: "Add a new category"),
+                GestureDetector(
+                    onTap: () {
+                      KRoutes.pop(context);
+                    },
+                    child: const Icon(Icons.close))
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: CustomText(
+                    text: "Category name :",
+                    fontsize: 15,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                FormTextField(
+                    controller: controller, suffixIcon: const Icon(Icons.link)),
+                const SizedBox(
+                  height: 20,
+                ),
+                CustomButton(
+                    buttonColor: primaryColor,
+                    text: "Add Category",
+                    textColor: kWhite,
+                    function: () {
+                      if (controller!.text.isEmpty) {
+                        Fluttertoast.showToast(msg: "Field cannot be empty");
+                      } else {
+                        Provider.of<FavouritiesModelView>(context,
+                                listen: false)
+                            .addToFavourities(controller.text, null);
+                        KRoutes.rootPop(context);
+                        Fluttertoast.showToast(msg: "Category added");
+                        controller.text = "";
+                      }
+                    }),
+                const SizedBox(
+                  height: 5,
+                )
+              ],
+            ),
+          );
+        });
   }
 }

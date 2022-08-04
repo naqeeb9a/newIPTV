@@ -1,4 +1,4 @@
-import 'package:bwciptv/IPTV/ViewModel/FavouriteChannel/favourities.dart';
+import 'package:bwciptv/IPTV/ViewModel/FavouriteChannel/favourities_channel.dart';
 import 'package:bwciptv/IPTV/ViewModel/IPTVModelView/iptv_model_view.dart';
 import 'package:bwciptv/Screens/homepage.dart';
 import 'package:flutter/material.dart';

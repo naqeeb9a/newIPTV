@@ -32,11 +32,11 @@ class BaseAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      // backgroundColor: Colors.transparent,
+      backgroundColor: Colors.transparent,
       elevation: 0,
       title: Text(
         title,
-        style: const TextStyle(color: kWhite),
+        style: const TextStyle(color: kblack),
       ),
       automaticallyImplyLeading: automaticallyImplyLeading,
       centerTitle: true,
@@ -48,7 +48,7 @@ class BaseAppBar extends StatelessWidget with PreferredSizeWidget {
                 child: const Icon(
                   Icons.arrow_back_ios,
                   size: 15,
-                  color: kWhite,
+                  color: kblack,
                 ),
               ),
       actions: widgets,

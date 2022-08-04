@@ -7,6 +7,7 @@ import 'package:m3u_nullsafe/m3u_nullsafe.dart';
 
 class IPTVModelView extends ChangeNotifier {
   Map<String, List<M3uGenericEntry>> _playList = {};
+  List<M3uGenericEntry> _allPlayList = [];
   bool _loading = false;
   ModelError? _modelError;
 
@@ -16,6 +17,7 @@ class IPTVModelView extends ChangeNotifier {
 
   Map<String, List<M3uGenericEntry>> get playList => _playList;
   bool get loading => _loading;
+  List<M3uGenericEntry> get allPlayList => _allPlayList;
   ModelError? get modelError => _modelError;
 
   setLoading(bool loading) {
@@ -23,8 +25,9 @@ class IPTVModelView extends ChangeNotifier {
     notifyListeners();
   }
 
-  setPostModelList(Map<String, List<M3uGenericEntry>> playList) {
-    _playList = playList;
+  setPostModelList(List playList) {
+    _playList = playList[0] as Map<String, List<M3uGenericEntry>>;
+    _allPlayList = playList[1] as List<M3uGenericEntry>;
   }
 
   setModelError(ModelError? modelError) {
@@ -35,7 +38,7 @@ class IPTVModelView extends ChangeNotifier {
     setLoading(true);
     var response = await IPTVService.getChannels();
     if (response is Success) {
-      setPostModelList(response.response as Map<String, List<M3uGenericEntry>>);
+      setPostModelList(response.response as List);
     }
     if (response is Failure) {
       ModelError modelError = ModelError(response.code, response.errorResponse);
@@ -48,7 +51,7 @@ class IPTVModelView extends ChangeNotifier {
     setLoading(true);
     var response = await IPTVService.getChannelsStorage(path);
     if (response is Success) {
-      setPostModelList(response.response as Map<String, List<M3uGenericEntry>>);
+      setPostModelList(response.response as List);
     }
     if (response is Failure) {
       ModelError modelError = ModelError(102, "Invalid M3u File");

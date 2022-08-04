@@ -4,10 +4,11 @@ import 'package:bwciptv/Widgets/custom_text.dart';
 
 import 'package:bwciptv/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatefulWidget {
-  final IPTVModelView iptvModelView;
-  const CustomDrawer({Key? key, required this.iptvModelView}) : super(key: key);
+
+  const CustomDrawer({Key? key,}) : super(key: key);
 
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
@@ -17,13 +18,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    IPTVModelView iptvModelView=context.watch<IPTVModelView>();
     List settings = [
       {
         "name": "List channels from Link",
         "icon": const Icon(Icons.link),
         "function": () {
           Functionality()
-              .showDialogueLink(context, controller, widget.iptvModelView);
+              .showDialogueLink(context, controller, iptvModelView);
         }
       },
       {
@@ -31,7 +33,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         "icon": const Icon(Icons.link),
         "function": () {
           Functionality()
-              .showDialogueStorage(context, controller, widget.iptvModelView);
+              .showDialogueStorage(context, controller, iptvModelView);
         }
       },
       {

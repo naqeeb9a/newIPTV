@@ -13,6 +13,10 @@ class KRoutes {
     Navigator.pop(context);
   }
 
+  static rootPop(context) {
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+
   static pushAndRemoveUntil(context, Widget page) {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(

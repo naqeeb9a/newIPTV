@@ -1,66 +1,94 @@
+import 'dart:math';
+
 import 'package:bwciptv/IPTV/ViewModel/IPTVModelView/iptv_model_view.dart';
 import 'package:bwciptv/IPTV/Views/DetailPage/detail_page.dart';
-import 'package:bwciptv/IPTV/Views/Drawer/drawer.dart';
-import 'package:bwciptv/IPTV/Views/FavoriteChannels/favourites.dart';
+import 'package:bwciptv/Widgets/custom_search.dart';
 import 'package:bwciptv/Widgets/widget.dart';
 import 'package:bwciptv/utils/app_routes.dart';
 import 'package:bwciptv/utils/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../../../Widgets/custom_loader.dart';
 
-final GlobalKey<ScaffoldState> _key = GlobalKey();
-
-class CategoriesListView extends StatelessWidget {
+class CategoriesListView extends StatefulWidget {
   const CategoriesListView({Key? key}) : super(key: key);
+
+  @override
+  State<CategoriesListView> createState() => _CategoriesListViewState();
+}
+
+class _CategoriesListViewState extends State<CategoriesListView> {
+  final TextEditingController controller = TextEditingController();
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     IPTVModelView iptvModelView = context.watch<IPTVModelView>();
-    return SafeArea(
-        child: Scaffold(
-            key: _key,
-            drawerEnableOpenDragGesture: false,
-            appBar: BaseAppBar(
-                title: "IPTV",
-                appBar: AppBar(),
-                automaticallyImplyLeading: true,
-                leading: IconButton(
-                  icon: const Icon(
-                    CupertinoIcons.line_horizontal_3,
-                  ),
-                  onPressed: () => _key.currentState!.openDrawer(),
-                ),
-                widgets: [
-                  GestureDetector(
-                    onTap: () {
-                      KRoutes.push(context, const Favourities());
-                    },
-                    child: Row(
-                      children: const [
-                        Icon(
-                          CupertinoIcons.heart,
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-                appBarHeight: 50),
-            drawer: Drawer(
-              child: CustomDrawer(
-                iptvModelView: iptvModelView,
-              ),
-            ),
-            body: categoriesView(iptvModelView, context)));
+    return Scaffold(
+      appBar: BaseAppBar(
+          title: "Categories",
+          appBar: AppBar(),
+          widgets: const [],
+          appBarHeight: 50),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            if (constraints.maxWidth > 900) {
+              return categoriesView(
+                  iptvModelView,
+                  context,
+                  MediaQuery.of(context).size.width *
+                      0.5 /
+                      MediaQuery.of(context).size.width *
+                      2,
+                  6);
+            }
+            if (constraints.maxWidth > 700) {
+              return categoriesView(
+                  iptvModelView,
+                  context,
+                  MediaQuery.of(context).size.width *
+                      0.5 /
+                      MediaQuery.of(context).size.width *
+                      1.7,
+                  4);
+            }
+            if (constraints.maxWidth > 400) {
+              return categoriesView(
+                  iptvModelView,
+                  context,
+                  MediaQuery.of(context).size.width *
+                      0.5 /
+                      MediaQuery.of(context).size.width *
+                      1.7,
+                  2);
+            }
+            if (constraints.maxWidth < 350) {
+              return categoriesView(
+                  iptvModelView,
+                  context,
+                  MediaQuery.of(context).size.width *
+                      0.5 /
+                      MediaQuery.of(context).size.width *
+                      1,
+                  2);
+            }
+
+            return categoriesView(iptvModelView, context, 16 / 15, 2);
+          },
+        ),
+      ),
+    );
   }
 
-  Widget categoriesView(IPTVModelView iptvModelView, BuildContext context) {
+  Widget categoriesView(IPTVModelView iptvModelView, BuildContext context,
+      double aspectRatio, int crossAxisCount) {
     if (iptvModelView.loading) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -74,7 +102,7 @@ class CategoriesListView extends StatelessWidget {
             children: const [
               CustomText(text: "Loading channels  "),
               JumpingDots(
-                color: Colors.orange,
+                color: primaryColor,
                 radius: 5,
                 innerPadding: 2,
                 numberOfDots: 4,
@@ -136,24 +164,69 @@ class CategoriesListView extends StatelessWidget {
         ],
       );
     }
-
-    return SingleChildScrollView(
-      child: Column(
-          children: iptvModelView.playList.keys
-              .toList()
-              .map((value) => ListTile(
-                    title: CustomText(
-                      text: value == "" ? "Undefined" : value,
-                      fontsize: 15,
-                    ),
-                    onTap: () => KRoutes.push(
-                        context,
-                        DetailPage(
-                          playList: iptvModelView.playList[value],
-                          categoryName: value,
-                        )),
-                  ))
-              .toList()),
-    );
+    List<String> categoriesList = iptvModelView.playList.keys.toList();
+    final suggestions = iptvModelView.playList.keys.toList().where((element) {
+      final categoryTitle = element.toLowerCase();
+      final input = controller.text.toLowerCase();
+      return categoryTitle.contains(input);
+    }).toList();
+    categoriesList = suggestions;
+    return Column(children: [
+      Padding(
+        padding: const EdgeInsets.all(10),
+        child: CustomSearch(
+          controller: controller,
+          searchText: "Search Categories",
+          function: () {
+            setState(() {});
+          },
+        ),
+      ),
+      Expanded(
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount, childAspectRatio: aspectRatio),
+          itemCount: categoriesList.length,
+          itemBuilder: (BuildContext context, int index) {
+            final value = categoriesList[index];
+            return GestureDetector(
+              onTap: () => KRoutes.push(
+                  context,
+                  DetailPage(
+                    playList: iptvModelView.playList[value],
+                  )),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors
+                      .primaries[Random().nextInt(Colors.primaries.length)],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                alignment: Alignment.center,
+                child: Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: kblack.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  alignment: Alignment.center,
+                  child: CustomText(
+                    text: value == "" ? "Undefined" : value,
+                    textAlign: TextAlign.center,
+                    fontsize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: kWhite,
+                    maxLines: 5,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    ]);
   }
 }
