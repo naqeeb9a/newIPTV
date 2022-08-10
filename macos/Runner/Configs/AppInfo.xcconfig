@@ -8,7 +8,7 @@
 PRODUCT_NAME = bwciptv
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.bwciptv
+PRODUCT_BUNDLE_IDENTIFIER = com.bwc.iptv;
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2022 com.example. All rights reserved.

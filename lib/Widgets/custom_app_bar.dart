@@ -5,6 +5,7 @@ import '../utils/app_routes.dart';
 
 class BaseAppBar extends StatelessWidget with PreferredSizeWidget {
   final Color backgroundColor;
+  final Color textColor;
   final String title;
   final AppBar appBar;
   final bool automaticallyImplyLeading, centerTitle;
@@ -26,7 +27,8 @@ class BaseAppBar extends StatelessWidget with PreferredSizeWidget {
       drawerEnableOpenDragGesture = false,
       required this.appBarHeight,
       this.bottom,
-      this.leading})
+      this.leading,
+      this.textColor = kblack})
       : super(key: key);
 
   @override
@@ -36,7 +38,7 @@ class BaseAppBar extends StatelessWidget with PreferredSizeWidget {
       elevation: 0,
       title: Text(
         title,
-        style: const TextStyle(color: kblack),
+        style: TextStyle(color: textColor),
       ),
       automaticallyImplyLeading: automaticallyImplyLeading,
       centerTitle: true,
@@ -45,10 +47,10 @@ class BaseAppBar extends StatelessWidget with PreferredSizeWidget {
           : leading ??
               InkWell(
                 onTap: () => KRoutes.pop(context),
-                child: const Icon(
+                child: Icon(
                   Icons.arrow_back_ios,
                   size: 15,
-                  color: kblack,
+                  color: textColor,
                 ),
               ),
       actions: widgets,

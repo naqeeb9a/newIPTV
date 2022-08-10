@@ -2,6 +2,7 @@
 
 import 'package:bwciptv/Functionality/functionality.dart';
 import 'package:bwciptv/IPTV/ViewModel/FavouriteChannel/favourities_channel.dart';
+import 'package:bwciptv/IPTV/Views/PlayerScreen/player_screen_copy.dart';
 import 'package:bwciptv/Widgets/custom_search.dart';
 import 'package:bwciptv/Widgets/widget.dart';
 import 'package:bwciptv/utils/app_routes.dart';
@@ -12,8 +13,6 @@ import 'package:lottie/lottie.dart';
 import 'package:m3u_nullsafe/m3u_nullsafe.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
-
-import '../PlayerScreen/player_screen.dart';
 
 class DetailPage extends StatefulWidget {
   final List<M3uGenericEntry?>? playList;
@@ -103,7 +102,7 @@ class _DetailPageState extends State<DetailPage> {
         ],
       );
     }
-    List channelsList = widget.playList!;
+    List<M3uGenericEntry?>? channelsList = widget.playList!;
     final suggestions = widget.playList!.where((element) {
       final categoryTitle = element!.title.toLowerCase();
       final input = controller.text.toLowerCase();
@@ -127,7 +126,7 @@ class _DetailPageState extends State<DetailPage> {
             itemCount: channelsList.length,
             padding: const EdgeInsets.all(10),
             itemBuilder: (BuildContext context, int index) {
-              M3uGenericEntry? value = channelsList[index];
+              M3uGenericEntry? value = channelsList![index];
               bool containsValue = false;
               for (List<M3uGenericEntry?> element in favList.values) {
                 for (var element2 in element) {
@@ -143,10 +142,15 @@ class _DetailPageState extends State<DetailPage> {
                   KRoutes.push(
                       globalContext,
                       PlayerScreen(
-                        link: value!.link,
-                        title: value.title == ""
-                            ? "Unknown Channel ${index + 1}"
-                            : value.title,
+                        // link: value!.link,
+                        // title: value.title == ""
+                        //     ? "Unknown Channel ${index + 1}"
+                        //     : value.title,
+                        // image: value.attributes.keys.toList().isEmpty
+                        //     ? "https://cdn.shopify.com/app-store/listing_images/b4e1fa4bf25f6bfb071bfe11a1ce136c/icon/CM37wMP0lu8CEAE=.jpg"
+                        //     : value.attributes["tvg-logo"].toString(),
+                        playList: channelsList,
+                        index: index,
                       ));
                 },
                 child: Column(

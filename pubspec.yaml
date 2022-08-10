@@ -40,11 +40,12 @@ dependencies:
   jumping_dot: ^0.0.4
   shared_preferences: ^2.0.15
   file_picker: ^5.0.0
-  flutter_vlc_player: ^7.1.5
-  audio_video_progress_bar: ^0.10.0
   fluttertoast: ^8.0.9
   wakelock: ^0.6.2
   persistent_bottom_nav_bar_v2: ^4.2.4
+  better_player: ^0.0.83
+  rename: ^2.0.1
+  line_icons: ^2.0.1
 
 dev_dependencies:
   flutter_test:
