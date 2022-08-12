@@ -2,7 +2,7 @@
 
 import 'package:bwciptv/Functionality/functionality.dart';
 import 'package:bwciptv/IPTV/ViewModel/FavouriteChannel/favourities_channel.dart';
-import 'package:bwciptv/IPTV/Views/PlayerScreen/player_screen_copy.dart';
+import 'package:bwciptv/IPTV/Views/PlayerScreen/custom_orientation_player.dart';
 import 'package:bwciptv/Widgets/custom_search.dart';
 import 'package:bwciptv/Widgets/widget.dart';
 import 'package:bwciptv/utils/app_routes.dart';
@@ -141,14 +141,7 @@ class _DetailPageState extends State<DetailPage> {
                 onTap: () {
                   KRoutes.push(
                       globalContext,
-                      PlayerScreen(
-                        // link: value!.link,
-                        // title: value.title == ""
-                        //     ? "Unknown Channel ${index + 1}"
-                        //     : value.title,
-                        // image: value.attributes.keys.toList().isEmpty
-                        //     ? "https://cdn.shopify.com/app-store/listing_images/b4e1fa4bf25f6bfb071bfe11a1ce136c/icon/CM37wMP0lu8CEAE=.jpg"
-                        //     : value.attributes["tvg-logo"].toString(),
+                      CustomOrientationPlayer(
                         playList: channelsList,
                         index: index,
                       ));

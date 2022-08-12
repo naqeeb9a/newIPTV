@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
     final PersistentTabController controller =
         PersistentTabController(initialIndex: 0);
 
-    List<Widget> _buildScreens() {
+    List<Widget> buildScreens() {
       return [
         const Favourities(),
         const AllChannels(),
@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
       ];
     }
 
-    List<PersistentBottomNavBarItem> _navBarsItems() {
+    List<PersistentBottomNavBarItem> navBarsItems() {
       return [
         PersistentBottomNavBarItem(
           icon: const Icon(CupertinoIcons.heart),
@@ -62,10 +62,11 @@ class HomePage extends StatelessWidget {
       context,
       controller: controller,
       navBarHeight: 50,
-      screens: _buildScreens(),
-      items: _navBarsItems(),
+      screens: buildScreens(),
+      items: navBarsItems(),
       bottomScreenMargin: 50,
       backgroundColor: Colors.white, // Default is Colors.white.
+      
       handleAndroidBackButtonPress: true, // Default is true.
       resizeToAvoidBottomInset:
           true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
