@@ -1,6 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
 
-import 'package:bwciptv/IPTV/ViewModel/FavouriteChannel/favourities_channel.dart';
 import 'package:bwciptv/Widgets/custom_search.dart';
 import 'package:bwciptv/Widgets/widget.dart';
 import 'package:bwciptv/utils/app_routes.dart';
@@ -13,7 +11,8 @@ import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
 
 import '../../../Functionality/functionality.dart';
-import '../PlayerScreen/player_screen.dart';
+import '../../ViewModel/FavouriteChannel/favourities_channel.dart';
+import '../PlayerScreen/player_screen_copy.dart';
 
 class DetailPage extends StatefulWidget {
   final List<M3uGenericEntry?>? playList;
