@@ -85,15 +85,17 @@ class AllChannels extends StatelessWidget {
       );
     }
     if (iptvModelView.allPlayList.isEmpty) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          LottieBuilder.asset(
-            "assets/emptyList.json",
-            width: 200,
-          ),
-          const CustomText(text: "No Channels found !!"),
-        ],
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            LottieBuilder.asset(
+              "assets/emptyList.json",
+              width: 200,
+            ),
+            const CustomText(text: "No Channels found !!"),
+          ],
+        ),
       );
     }
     return DetailPage(

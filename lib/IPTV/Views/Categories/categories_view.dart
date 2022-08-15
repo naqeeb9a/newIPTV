@@ -7,6 +7,7 @@ import 'package:bwciptv/IPTV/Views/Drawer/drawer.dart';
 import 'package:bwciptv/IPTV/Views/FavoriteChannels/favourites.dart';
 import 'package:bwciptv/Widgets/custom_search.dart';
 import 'package:bwciptv/Widgets/widget.dart';
+import 'package:bwciptv/utils/action_handler.dart';
 import 'package:bwciptv/utils/app_routes.dart';
 import 'package:bwciptv/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -26,104 +27,127 @@ final GlobalKey<ScaffoldState> _key = GlobalKey();
 
 class _CategoriesListViewState extends State<CategoriesListView> {
   final TextEditingController controller = TextEditingController();
+  // FocusNode? drawerList;
+  // FocusNode? searchAll;
+  // FocusNode? favouritesList;
+  // setFirstNode() {
+  //   if (drawerList == null) {
+  //     drawerList = FocusNode();
+  //     searchAll = FocusNode();
+  //     favouritesList = FocusNode();
+  //     FocusScope.of(context).requestFocus(drawerList);
+  //   }
+  // }
+
+  // changeFocusNode(BuildContext context, FocusNode node) {
+  //   FocusScope.of(context).requestFocus(node);
+  //   setState(() {});
+  // }
+
   bool enable = false;
   @override
   void dispose() {
     controller.dispose();
+    // drawerList!.dispose();
+    // searchAll!.dispose();
+    // favouritesList!.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // setFirstNode();
     IPTVModelView iptvModelView = context.watch<IPTVModelView>();
-    return Scaffold(
-      key: _key,
-      appBar: BaseAppBar(
-          title: "Categories",
-          appBar: AppBar(),
-          widgets: [
-            InkWell(
-              onTap: () {
-                KRoutes.push(context, const AllChannels());
-              },
-              child: Container(
-                padding: const EdgeInsets.all(5),
-                child: const Icon(
-                  Icons.search,
-                  color: kblack,
+    return ActionHandler().handleArrowEnterActions(
+      child: Scaffold(
+        key: _key,
+        appBar: BaseAppBar(
+            title: "Categories",
+            appBar: AppBar(),
+            widgets: [
+              InkWell(
+                onTap: () {
+                  KRoutes.push(context, const AllChannels());
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(5),
+                  child: const Icon(
+                    Icons.search,
+                    color: kblack,
+                  ),
                 ),
               ),
-            ),
-            InkWell(
-              onTap: () {
-                KRoutes.push(context, const Favourities());
-              },
-              child: Container(
-                padding: const EdgeInsets.all(5),
-                child: const Icon(
-                  Icons.favorite_outline,
-                  color: kblack,
+              InkWell(
+                onTap: () {
+                  KRoutes.push(context, const Favourities());
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(5),
+                  child: const Icon(
+                    Icons.favorite_outline,
+                    color: kblack,
+                  ),
                 ),
               ),
-            ),
-          ],
-          automaticallyImplyLeading: true,
-          leading: InkWell(
-              onTap: () {
-                _key.currentState!.openDrawer();
-              },
-              child: const Icon(
-                Icons.menu,
-                color: kblack,
-              )),
-          appBarHeight: 50),
-      drawer: const Drawer(child: CustomDrawer()),
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            if (constraints.maxWidth > 900) {
-              return categoriesView(
-                  iptvModelView,
-                  context,
-                  MediaQuery.of(context).size.width *
-                      0.5 /
-                      MediaQuery.of(context).size.width *
-                      2,
-                  6);
-            }
-            if (constraints.maxWidth > 700) {
-              return categoriesView(
-                  iptvModelView,
-                  context,
-                  MediaQuery.of(context).size.width *
-                      0.5 /
-                      MediaQuery.of(context).size.width *
-                      1.7,
-                  4);
-            }
-            if (constraints.maxWidth > 400) {
-              return categoriesView(
-                  iptvModelView,
-                  context,
-                  MediaQuery.of(context).size.width *
-                      0.5 /
-                      MediaQuery.of(context).size.width *
-                      1.7,
-                  2);
-            }
-            if (constraints.maxWidth < 350) {
-              return categoriesView(
-                  iptvModelView,
-                  context,
-                  MediaQuery.of(context).size.width *
-                      0.5 /
-                      MediaQuery.of(context).size.width *
-                      1,
-                  2);
-            }
+            ],
+            automaticallyImplyLeading: true,
+            leading: InkWell(
+                onTap: () {
+                  _key.currentState!.openDrawer();
+                },
+                child: const Icon(
+                  Icons.menu,
+                  color: kblack,
+                )),
+            appBarHeight: 50),
+        drawer: const Drawer(child: CustomDrawer()),
+        body: SafeArea(
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              if (constraints.maxWidth > 900) {
+                return categoriesView(
+                    iptvModelView,
+                    context,
+                    MediaQuery.of(context).size.width *
+                        0.5 /
+                        MediaQuery.of(context).size.width *
+                        2,
+                    6);
+              }
+              if (constraints.maxWidth > 700) {
+                return categoriesView(
+                    iptvModelView,
+                    context,
+                    MediaQuery.of(context).size.width *
+                        0.5 /
+                        MediaQuery.of(context).size.width *
+                        1.7,
+                    4);
+              }
+              if (constraints.maxWidth > 400) {
+                return categoriesView(
+                    iptvModelView,
+                    context,
+                    MediaQuery.of(context).size.width *
+                        0.5 /
+                        MediaQuery.of(context).size.width *
+                        1.7,
+                    2);
+              }
+              if (constraints.maxWidth < 350) {
+                return categoriesView(
+                    iptvModelView,
+                    context,
+                    MediaQuery.of(context).size.width *
+                        0.5 /
+                        MediaQuery.of(context).size.width *
+                        1,
+                    2);
+              }
 
-            return categoriesView(iptvModelView, context, 16 / 15, 2);
-          },
+              return categoriesView(iptvModelView, context, 16 / 15, 2);
+            },
+          ),
         ),
       ),
     );
@@ -235,7 +259,7 @@ class _CategoriesListViewState extends State<CategoriesListView> {
             itemCount: categoriesList.length,
             itemBuilder: (BuildContext context, int index) {
               final value = categoriesList[index];
-              return GestureDetector(
+              return InkWell(
                 onTap: () => KRoutes.push(
                     context,
                     DetailPage(

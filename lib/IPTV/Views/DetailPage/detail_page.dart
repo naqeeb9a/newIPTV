@@ -48,11 +48,12 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar(
-          title: "All channels",
-          appBar: AppBar(),
-          automaticallyImplyLeading: true,
-          widgets: const [],
-          appBarHeight: 50),
+        title: "Channel's List",
+        appBar: AppBar(),
+        widgets: const [],
+        appBarHeight: 50,
+        automaticallyImplyLeading: true,
+      ),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -96,12 +97,14 @@ class _DetailPageState extends State<DetailPage> {
     Map<String, List<M3uGenericEntry?>> favList =
         context.watch<FavouritiesModelView>().favouriteList;
     if (widget.playList!.isEmpty) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          LottieBuilder.asset("assets/emptyList.json"),
-          const CustomText(text: "No channels found")
-        ],
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            LottieBuilder.asset("assets/emptyList.json"),
+            const CustomText(text: "No channels found")
+          ],
+        ),
       );
     }
     List<M3uGenericEntry?>? channelsList = widget.playList!;

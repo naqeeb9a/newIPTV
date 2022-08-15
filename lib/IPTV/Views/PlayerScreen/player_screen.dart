@@ -48,7 +48,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     super.initState();
     movieCounter = widget.index;
     setSystemPref();
-    hideCotrols();
+
     initPlayer();
   }
 
@@ -417,7 +417,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
             initplayer = true;
           });
           break;
-        case 'Pause':
+        case 'Select':
           setState(() {
             if (_videoPlayerController.value.isPlaying) {
               _videoPlayerController.pause();
