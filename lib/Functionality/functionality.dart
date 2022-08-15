@@ -130,7 +130,7 @@ class Functionality {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const CustomText(text: "Select a category"),
-                      GestureDetector(
+                      InkWell(
                           onTap: () {
                             showAddingCategory(context, controller, item);
                           },
@@ -206,7 +206,20 @@ class Functionality {
                   height: 20,
                 ),
                 FormTextField(
-                    controller: controller, suffixIcon: const Icon(Icons.link)),
+                  controller: controller,
+                  suffixIcon: const Icon(Icons.link),
+                  onSubmitted: (value) {
+                    if (controller!.text.isEmpty) {
+                      Fluttertoast.showToast(msg: "Field cannot be empty");
+                    } else {
+                      Provider.of<FavouritiesModelView>(context, listen: false)
+                          .addToFavourities(controller.text, null);
+                      KRoutes.rootPop(context);
+                      Fluttertoast.showToast(msg: "Category added");
+                      controller.text = "";
+                    }
+                  },
+                ),
                 const SizedBox(
                   height: 20,
                 ),

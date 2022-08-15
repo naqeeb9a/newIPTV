@@ -44,7 +44,6 @@ class _CategoriesListViewState extends State<CategoriesListView> {
   //   setState(() {});
   // }
 
-  bool enable = false;
   @override
   void dispose() {
     controller.dispose();
@@ -246,7 +245,6 @@ class _CategoriesListViewState extends State<CategoriesListView> {
           child: CustomSearch(
             controller: controller,
             searchText: "Search Categories",
-            enabled: enable,
             function: () {
               setState(() {});
             },

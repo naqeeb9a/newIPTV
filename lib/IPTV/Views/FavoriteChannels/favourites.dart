@@ -113,7 +113,7 @@ class _FavouritiesState extends State<Favourities> {
         final changedColor =
             Colors.primaries[Random().nextInt(Colors.primaries.length)];
         final updatedValue = favList.keys.toList()[index];
-        return GestureDetector(
+        return InkWell(
           onTap: () {
             KRoutes.push(context, DetailPage(playList: favList[updatedValue]));
           },

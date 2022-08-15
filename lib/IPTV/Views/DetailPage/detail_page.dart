@@ -1,6 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:bwciptv/Functionality/functionality.dart';
 import 'package:bwciptv/IPTV/ViewModel/FavouriteChannel/favourities_channel.dart';
 import 'package:bwciptv/Widgets/custom_search.dart';
 import 'package:bwciptv/Widgets/widget.dart';
@@ -13,6 +12,7 @@ import 'package:m3u_nullsafe/m3u_nullsafe.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
 
+import '../../../Functionality/functionality.dart';
 import '../PlayerScreen/player_screen.dart';
 
 class DetailPage extends StatefulWidget {
@@ -64,7 +64,7 @@ class _DetailPageState extends State<DetailPage> {
                       0.5 /
                       MediaQuery.of(context).size.width *
                       1,
-                  6);
+                  5);
             }
             if (constraints.maxWidth > 600) {
               return chanelsListView(
@@ -73,7 +73,7 @@ class _DetailPageState extends State<DetailPage> {
                       0.5 /
                       MediaQuery.of(context).size.width *
                       1,
-                  5);
+                  4);
             }
             if (constraints.maxWidth < 350) {
               return chanelsListView(
@@ -101,7 +101,10 @@ class _DetailPageState extends State<DetailPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            LottieBuilder.asset("assets/emptyList.json"),
+            LottieBuilder.asset(
+              "assets/emptyList.json",
+              width: 200,
+            ),
             const CustomText(text: "No channels found")
           ],
         ),
@@ -142,89 +145,95 @@ class _DetailPageState extends State<DetailPage> {
                   }
                 }
               }
-              return InkWell(
-                onTap: () {
-                  KRoutes.push(
-                      context,
-                      PlayerScreen(
-                        playList: channelsList,
-                        index: index,
-                      ));
-                },
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: kWhite,
-                          boxShadow: [
-                            BoxShadow(
-                                offset: Offset(1, 2),
-                                spreadRadius: 2,
-                                blurRadius: 2,
-                                color: kGrey)
-                          ]),
-                      padding: EdgeInsets.all(
-                          MediaQuery.of(context).size.width * 0.01),
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width * 0.2,
-                      height: MediaQuery.of(context).size.width * 0.2,
-                      child: Image.network(
-                        value!.attributes.keys.toList().isEmpty
-                            ? "http://"
-                            : value.attributes["tvg-logo"].toString(),
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) {
-                            return child;
-                          }
-                          return const CircularProgressIndicator();
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Image.asset("assets/tvPlaceHolder.png");
-                        },
-                        width: MediaQuery.of(context).size.width * 0.1,
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        KRoutes.push(
+                            context,
+                            PlayerScreen(
+                              playList: channelsList,
+                              index: index,
+                            ));
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: kWhite,
+                                boxShadow: [
+                                  BoxShadow(
+                                      offset: Offset(1, 2),
+                                      spreadRadius: 2,
+                                      blurRadius: 2,
+                                      color: kGrey)
+                                ]),
+                            padding: EdgeInsets.all(
+                                MediaQuery.of(context).size.width * 0.01),
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            height: MediaQuery.of(context).size.width * 0.2,
+                            child: Image.network(
+                              value!.attributes.keys.toList().isEmpty
+                                  ? "http://"
+                                  : value.attributes["tvg-logo"].toString(),
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                }
+                                return const CircularProgressIndicator();
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset("assets/tvPlaceHolder.png");
+                              },
+                              width: MediaQuery.of(context).size.width * 0.1,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: CustomText(
+                                  text: value.title == ""
+                                      ? "Unknown Channel ${index + 1}"
+                                      : value.title,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      if (containsValue) {
+                        context
+                            .read<FavouritiesModelView>()
+                            .removeFromFavourities(value);
+                        Fluttertoast.showToast(
+                            msg: "Removed from Favouritites");
+                      } else {
+                        Functionality()
+                            .showDialogueFav(context, catController, value);
+                      }
+                    },
+                    child: Icon(
+                      containsValue ? Icons.favorite : Icons.favorite_outline,
+                      color: containsValue ? Colors.red : kblack,
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CustomText(
-                            text: value.title == ""
-                                ? "Unknown Channel ${index + 1}"
-                                : value.title,
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            if (containsValue) {
-                              context
-                                  .read<FavouritiesModelView>()
-                                  .removeFromFavourities(value);
-                              Fluttertoast.showToast(
-                                  msg: "Removed from Favouritites");
-                            } else {
-                              Functionality().showDialogueFav(
-                                  context, catController, value);
-                            }
-                          },
-                          child: Icon(
-                            containsValue
-                                ? Icons.favorite
-                                : Icons.favorite_outline,
-                            color: containsValue ? Colors.red : kblack,
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+                  )
+                ],
               );
             },
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

@@ -7,6 +7,7 @@ class FormTextField extends StatefulWidget {
   final bool isPass;
   final String? Function(String?)? function;
   final int? maxLength;
+  final void Function(String)? onSubmitted;
   const FormTextField(
       {Key? key,
       required this.controller,
@@ -14,7 +15,8 @@ class FormTextField extends StatefulWidget {
       this.keyboardtype = TextInputType.text,
       this.isPass = false,
       this.function,
-      this.maxLength})
+      this.maxLength,
+      this.onSubmitted})
       : super(key: key);
 
   @override
@@ -25,13 +27,12 @@ class _FormTextFieldState extends State<FormTextField> {
   bool isVisible = true;
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return TextField(
       controller: widget.controller,
       keyboardType: widget.keyboardtype,
       obscureText: widget.isPass ? isVisible : false,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
       maxLength: widget.maxLength,
-      validator: widget.function,
+      onSubmitted: widget.onSubmitted,
       decoration: InputDecoration(
           counterText: "",
           isDense: true,
