@@ -1,6 +1,6 @@
 import 'package:bwciptv/IPTV/ViewModel/FavouriteChannel/favourities_channel.dart';
 import 'package:bwciptv/IPTV/ViewModel/IPTVModelView/iptv_model_view.dart';
-import 'package:bwciptv/Screens/homepage.dart';
+import 'package:bwciptv/IPTV/Views/Categories/categories_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home: const HomePage(),
+        home: const CategoriesListView(),
       ),
     );
   }

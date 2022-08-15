@@ -31,6 +31,7 @@ class _FavouritiesState extends State<Favourities> {
       appBar: BaseAppBar(
           title: "Favourites",
           appBar: AppBar(),
+          automaticallyImplyLeading: true,
           widgets: const [],
           appBarHeight: 50),
       floatingActionButton: FloatingActionButton(

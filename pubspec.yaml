@@ -48,6 +48,9 @@ dependencies:
   flick_video_player: ^0.5.0
   visibility_detector: ^0.3.3
   m3u_nullsafe: ^1.0.4
+  better_player: ^0.0.83
+  flutter_vlc_player: ^7.1.5
+  audio_video_progress_bar: ^0.10.0
 
 dev_dependencies:
   flutter_test:

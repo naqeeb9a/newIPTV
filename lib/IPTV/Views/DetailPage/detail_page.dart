@@ -2,7 +2,6 @@
 
 import 'package:bwciptv/Functionality/functionality.dart';
 import 'package:bwciptv/IPTV/ViewModel/FavouriteChannel/favourities_channel.dart';
-import 'package:bwciptv/IPTV/Views/PlayerScreen/custom_orientation_player.dart';
 import 'package:bwciptv/Widgets/custom_search.dart';
 import 'package:bwciptv/Widgets/widget.dart';
 import 'package:bwciptv/utils/app_routes.dart';
@@ -14,12 +13,15 @@ import 'package:m3u_nullsafe/m3u_nullsafe.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
 
+import '../PlayerScreen/player_screen.dart';
+
 class DetailPage extends StatefulWidget {
   final List<M3uGenericEntry?>? playList;
-  final bool isAllChannel;
-  const DetailPage(
-      {Key? key, required this.playList, this.isAllChannel = false})
-      : super(key: key);
+
+  const DetailPage({
+    Key? key,
+    required this.playList,
+  }) : super(key: key);
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -48,7 +50,7 @@ class _DetailPageState extends State<DetailPage> {
       appBar: BaseAppBar(
           title: "All channels",
           appBar: AppBar(),
-          automaticallyImplyLeading: widget.isAllChannel ? false : true,
+          automaticallyImplyLeading: true,
           widgets: const [],
           appBarHeight: 50),
       body: SafeArea(
@@ -140,8 +142,8 @@ class _DetailPageState extends State<DetailPage> {
               return InkWell(
                 onTap: () {
                   KRoutes.push(
-                      globalContext,
-                      CustomOrientationPlayer(
+                      context,
+                      PlayerScreen(
                         playList: channelsList,
                         index: index,
                       ));

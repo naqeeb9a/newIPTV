@@ -98,7 +98,6 @@ class AllChannels extends StatelessWidget {
     }
     return DetailPage(
       playList: iptvModelView.allPlayList,
-      isAllChannel: true,
     );
   }
 }

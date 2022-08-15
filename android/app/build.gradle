@@ -48,14 +48,14 @@ android {
     }
 
 
-    splits {
-        abi {
-         enable true
-         reset()
-         include 'x86'
-         universalApk false
-        }
-    }
+    // splits {
+    //     abi {
+    //      enable true
+    //      reset()
+    //      include 'x86'
+    //      universalApk false
+    //     }
+    // }
 
     
     defaultConfig {

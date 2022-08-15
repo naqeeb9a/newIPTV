@@ -1,7 +1,10 @@
 import 'dart:math';
 
 import 'package:bwciptv/IPTV/ViewModel/IPTVModelView/iptv_model_view.dart';
+import 'package:bwciptv/IPTV/Views/AllChannels/all_channels.dart';
 import 'package:bwciptv/IPTV/Views/DetailPage/detail_page.dart';
+import 'package:bwciptv/IPTV/Views/Drawer/drawer.dart';
+import 'package:bwciptv/IPTV/Views/FavoriteChannels/favourites.dart';
 import 'package:bwciptv/Widgets/custom_search.dart';
 import 'package:bwciptv/Widgets/widget.dart';
 import 'package:bwciptv/utils/app_routes.dart';
@@ -19,8 +22,11 @@ class CategoriesListView extends StatefulWidget {
   State<CategoriesListView> createState() => _CategoriesListViewState();
 }
 
+final GlobalKey<ScaffoldState> _key = GlobalKey();
+
 class _CategoriesListViewState extends State<CategoriesListView> {
   final TextEditingController controller = TextEditingController();
+  bool enable = false;
   @override
   void dispose() {
     controller.dispose();
@@ -31,11 +37,47 @@ class _CategoriesListViewState extends State<CategoriesListView> {
   Widget build(BuildContext context) {
     IPTVModelView iptvModelView = context.watch<IPTVModelView>();
     return Scaffold(
+      key: _key,
       appBar: BaseAppBar(
           title: "Categories",
           appBar: AppBar(),
-          widgets: const [],
+          widgets: [
+            InkWell(
+              onTap: () {
+                KRoutes.push(context, const AllChannels());
+              },
+              child: Container(
+                padding: const EdgeInsets.all(5),
+                child: const Icon(
+                  Icons.search,
+                  color: kblack,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                KRoutes.push(context, const Favourities());
+              },
+              child: Container(
+                padding: const EdgeInsets.all(5),
+                child: const Icon(
+                  Icons.favorite_outline,
+                  color: kblack,
+                ),
+              ),
+            ),
+          ],
+          automaticallyImplyLeading: true,
+          leading: InkWell(
+              onTap: () {
+                _key.currentState!.openDrawer();
+              },
+              child: const Icon(
+                Icons.menu,
+                color: kblack,
+              )),
           appBarHeight: 50),
+      drawer: const Drawer(child: CustomDrawer()),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -153,15 +195,17 @@ class _CategoriesListViewState extends State<CategoriesListView> {
       );
     }
     if (iptvModelView.playList.isEmpty) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          LottieBuilder.asset(
-            "assets/emptyList.json",
-            width: 200,
-          ),
-          const CustomText(text: "No Channels found !!"),
-        ],
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            LottieBuilder.asset(
+              "assets/emptyList.json",
+              width: 200,
+            ),
+            const CustomText(text: "No Channels found !!"),
+          ],
+        ),
       );
     }
     List<String> categoriesList = iptvModelView.playList.keys.toList();
@@ -171,62 +215,65 @@ class _CategoriesListViewState extends State<CategoriesListView> {
       return categoryTitle.contains(input);
     }).toList();
     categoriesList = suggestions;
-    return Column(children: [
-      Padding(
-        padding: const EdgeInsets.all(10),
-        child: CustomSearch(
-          controller: controller,
-          searchText: "Search Categories",
-          function: () {
-            setState(() {});
-          },
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: CustomSearch(
+            controller: controller,
+            searchText: "Search Categories",
+            enabled: enable,
+            function: () {
+              setState(() {});
+            },
+          ),
         ),
-      ),
-      Expanded(
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: crossAxisCount, childAspectRatio: aspectRatio),
-          itemCount: categoriesList.length,
-          itemBuilder: (BuildContext context, int index) {
-            final value = categoriesList[index];
-            return GestureDetector(
-              onTap: () => KRoutes.push(
-                  context,
-                  DetailPage(
-                    playList: iptvModelView.playList[value],
-                  )),
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                margin: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors
-                      .primaries[Random().nextInt(Colors.primaries.length)],
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                alignment: Alignment.center,
+        Expanded(
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount, childAspectRatio: aspectRatio),
+            itemCount: categoriesList.length,
+            itemBuilder: (BuildContext context, int index) {
+              final value = categoriesList[index];
+              return GestureDetector(
+                onTap: () => KRoutes.push(
+                    context,
+                    DetailPage(
+                      playList: iptvModelView.playList[value],
+                    )),
                 child: Container(
-                  height: double.infinity,
-                  width: double.infinity,
                   padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: kblack.withOpacity(0.5),
+                    color: Colors
+                        .primaries[Random().nextInt(Colors.primaries.length)],
                     borderRadius: BorderRadius.circular(20),
                   ),
                   alignment: Alignment.center,
-                  child: CustomText(
-                    text: value == "" ? "Undefined" : value,
-                    textAlign: TextAlign.center,
-                    fontsize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: kWhite,
-                    maxLines: 5,
+                  child: Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: kblack.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    alignment: Alignment.center,
+                    child: CustomText(
+                      text: value == "" ? "Undefined" : value,
+                      textAlign: TextAlign.center,
+                      fontsize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: kWhite,
+                      maxLines: 5,
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 }
