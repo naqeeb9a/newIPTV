@@ -192,6 +192,19 @@ class _CategoriesListViewState extends State<CategoriesListView> {
               width: 200,
             ),
             const CustomText(text: "No Channels found !!"),
+            const SizedBox(
+              height: 40,
+            ),
+            CustomButton(
+              buttonColor: primaryColor,
+              text: "Try again",
+              fontsize: 18,
+              function: () {
+                iptvModelView.setModelError(null);
+                iptvModelView.getChannelsList();
+              },
+              textColor: kWhite,
+            )
           ],
         ),
       );
