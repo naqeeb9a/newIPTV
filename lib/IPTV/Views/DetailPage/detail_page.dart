@@ -1,4 +1,3 @@
-
 import 'package:bwciptv/Widgets/custom_search.dart';
 import 'package:bwciptv/Widgets/widget.dart';
 import 'package:bwciptv/utils/app_routes.dart';
@@ -15,11 +14,13 @@ import '../../ViewModel/FavouriteChannel/favourities_channel.dart';
 import '../PlayerScreen/player_screen_copy.dart';
 
 class DetailPage extends StatefulWidget {
+  final TextEditingValue textEditingValue;
   final List<M3uGenericEntry?>? playList;
 
   const DetailPage({
     Key? key,
     required this.playList,
+    required this.textEditingValue,
   }) : super(key: key);
 
   @override
@@ -31,6 +32,7 @@ class _DetailPageState extends State<DetailPage> {
   final TextEditingController catController = TextEditingController();
   @override
   void initState() {
+    controller.value = widget.textEditingValue;
     Wakelock.enable();
     super.initState();
   }
@@ -46,46 +48,44 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BaseAppBar(
-        title: "Channel's List",
-        appBar: AppBar(),
-        widgets: const [],
-        appBarHeight: 50,
-        automaticallyImplyLeading: true,
-      ),
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            if (constraints.maxWidth > 900) {
-              return chanelsListView(
-                  context,
-                  MediaQuery.of(context).size.width *
-                      0.5 /
-                      MediaQuery.of(context).size.width *
-                      1,
-                  5);
-            }
-            if (constraints.maxWidth > 600) {
-              return chanelsListView(
-                  context,
-                  MediaQuery.of(context).size.width *
-                      0.5 /
-                      MediaQuery.of(context).size.width *
-                      1,
-                  4);
-            }
-            if (constraints.maxWidth < 350) {
-              return chanelsListView(
-                  context,
-                  MediaQuery.of(context).size.width *
-                      0.5 /
-                      MediaQuery.of(context).size.width *
-                      1,
-                  3);
-            }
+      body: RawKeyboardListener(
+        autofocus: true,
+      
+        focusNode: FocusNode(),
+        child: SafeArea(
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              if (constraints.maxWidth > 900) {
+                return chanelsListView(
+                    context,
+                    MediaQuery.of(context).size.width *
+                        0.5 /
+                        MediaQuery.of(context).size.width *
+                        1,
+                    5);
+              }
+              if (constraints.maxWidth > 600) {
+                return chanelsListView(
+                    context,
+                    MediaQuery.of(context).size.width *
+                        0.5 /
+                        MediaQuery.of(context).size.width *
+                        1,
+                    4);
+              }
+              if (constraints.maxWidth < 350) {
+                return chanelsListView(
+                    context,
+                    MediaQuery.of(context).size.width *
+                        0.5 /
+                        MediaQuery.of(context).size.width *
+                        1,
+                    3);
+              }
 
-            return chanelsListView(context, 16 / 25, 3);
-          },
+              return chanelsListView(context, 16 / 25, 3);
+            },
+          ),
         ),
       ),
     );
@@ -125,6 +125,25 @@ class _DetailPageState extends State<DetailPage> {
             searchText: "Search Channels",
             function: () {
               setState(() {});
+            },
+            onSubmitted: (value) {
+              KRoutes.pop(context);
+
+              KRoutes.push(
+                  context,
+                  Scaffold(
+                    appBar: BaseAppBar(
+                      title: "Channel's List",
+                      appBar: AppBar(),
+                      widgets: const [],
+                      appBarHeight: 50,
+                      automaticallyImplyLeading: true,
+                    ),
+                    body: DetailPage(
+                      textEditingValue: TextEditingValue(text: value),
+                      playList: widget.playList,
+                    ),
+                  ));
             },
           ),
         ),

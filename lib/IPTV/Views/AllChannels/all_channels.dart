@@ -16,6 +16,13 @@ class AllChannels extends StatelessWidget {
   Widget build(BuildContext context) {
     IPTVModelView iptvModelView = context.watch<IPTVModelView>();
     return Scaffold(
+      appBar: BaseAppBar(
+        title: "Channel's List",
+        appBar: AppBar(),
+        widgets: const [],
+        appBarHeight: 50,
+        automaticallyImplyLeading: true,
+      ),
       body: allChannelsView(iptvModelView),
     );
   }
@@ -100,6 +107,7 @@ class AllChannels extends StatelessWidget {
     }
     return DetailPage(
       playList: iptvModelView.allPlayList,
+      textEditingValue: const TextEditingValue(),
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:better_player/better_player.dart';
-import 'package:bwciptv/Widgets/custom_app_bar.dart';
 import 'package:bwciptv/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:m3u_nullsafe/m3u_nullsafe.dart';
 
@@ -53,45 +53,43 @@ class _PlayerScreenState extends State<PlayerScreen> {
     _betterPlayerController = BetterPlayerController(
         const BetterPlayerConfiguration(
           autoPlay: true,
+          // fullScreenByDefault: true,
           controlsConfiguration: BetterPlayerControlsConfiguration(),
         ),
         betterPlayerDataSource: betterPlayerDataSource);
     _betterPlayerController.setVolume(1);
+    Fluttertoast.showToast(
+        msg: "Now Playing ${widget.playList![basicIndex]!.title}");
     setState(() {
       initPlayer = true;
     });
   }
 
   Future<void> onKey(RawKeyEvent e) async {
-    if (e.runtimeType.toString() == 'RawKeyDownEvent') {
-    
-      switch (e.logicalKey.debugName) {
-        case 'Arrow Right':
-          forward();
-          break;
-        case 'Arrow Left':
-          backward();
-          break;
-        case 'Select':
-          setState(() {
-            if (_betterPlayerController
-                .videoPlayerController!.value.isPlaying) {
-              _betterPlayerController.pause();
-            } else {
-              _betterPlayerController.play();
-            }
-          });
-          break;
-        case 'Enter':
-          setState(() {
-            if (_betterPlayerController
-                .videoPlayerController!.value.isPlaying) {
-              _betterPlayerController.pause();
-            } else {
-              _betterPlayerController.play();
-            }
-          });
-          break;
+    if (e.runtimeType == RawKeyDownEvent) {
+      if (e.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
+        backward();
+      }
+      if (e.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
+        forward();
+      }
+      if (e.isKeyPressed(LogicalKeyboardKey.select)) {
+        setState(() {
+          if (_betterPlayerController.videoPlayerController!.value.isPlaying) {
+            _betterPlayerController.pause();
+          } else {
+            _betterPlayerController.play();
+          }
+        });
+      }
+      if (e.isKeyPressed(LogicalKeyboardKey.enter)) {
+        setState(() {
+          if (_betterPlayerController.videoPlayerController!.value.isPlaying) {
+            _betterPlayerController.pause();
+          } else {
+            _betterPlayerController.play();
+          }
+        });
       }
     }
   }
@@ -133,11 +131,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
       _betterPlayerController = BetterPlayerController(
           const BetterPlayerConfiguration(
             autoPlay: true,
+            // fullScreenByDefault: true,
             controlsConfiguration: BetterPlayerControlsConfiguration(),
           ),
           betterPlayerDataSource: betterPlayerDataSource)
         ..setVolume(1);
     });
+    Fluttertoast.showToast(
+        msg: "Now Playing ${widget.playList![basicIndex]!.title}");
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         initPlayer = true;
@@ -149,8 +150,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
     _betterPlayerController.dispose();
     setState(() {
       initPlayer = false;
-      if ((basicIndex - 1) == widget.playList!.length) {
-        basicIndex = 0;
+      if (basicIndex == 0) {
+        basicIndex = widget.playList!.length - 1;
       } else {
         basicIndex = basicIndex - 1;
       }
@@ -182,11 +183,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
       _betterPlayerController = BetterPlayerController(
           const BetterPlayerConfiguration(
             autoPlay: true,
+            // fullScreenByDefault: true,
             controlsConfiguration: BetterPlayerControlsConfiguration(),
           ),
           betterPlayerDataSource: betterPlayerDataSource)
         ..setVolume(1);
     });
+    Fluttertoast.showToast(
+        msg: "Now Playing ${widget.playList![basicIndex]!.title}");
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         initPlayer = true;
@@ -202,39 +206,39 @@ class _PlayerScreenState extends State<PlayerScreen> {
       onKey: onKey,
       child: Scaffold(
         backgroundColor: kblack,
-        appBar: BaseAppBar(
-            title: widget.playList![basicIndex]!.title,
-            appBar: AppBar(),
-            widgets: [
-              GestureDetector(
-                onTap: () {
-                  backward();
-                },
-                child: Container(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: const Icon(
-                    LineIcons.backward,
-                    color: kWhite,
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  forward();
-                },
-                child: Container(
-                  padding: const EdgeInsets.only(right: 20, left: 20),
-                  child: const Icon(
-                    LineIcons.forward,
-                    color: kWhite,
-                  ),
-                ),
-              )
-            ],
-            automaticallyImplyLeading: true,
-            textColor: kWhite,
-            centerTitle: false,
-            appBarHeight: 50),
+        // appBar: BaseAppBar(
+        //     title: widget.playList![basicIndex]!.title,
+        //     appBar: AppBar(),
+        //     widgets: [
+        //       GestureDetector(
+        //         onTap: () {
+        //           backward();
+        //         },
+        //         child: Container(
+        //           padding: const EdgeInsets.only(right: 20),
+        //           child: const Icon(
+        //             LineIcons.backward,
+        //             color: kWhite,
+        //           ),
+        //         ),
+        //       ),
+        //       GestureDetector(
+        //         onTap: () {
+        //           forward();
+        //         },
+        //         child: Container(
+        //           padding: const EdgeInsets.only(right: 20, left: 20),
+        //           child: const Icon(
+        //             LineIcons.forward,
+        //             color: kWhite,
+        //           ),
+        //         ),
+        //       )
+        //     ],
+        //     automaticallyImplyLeading: true,
+        //     textColor: kWhite,
+        //     centerTitle: false,
+        //     appBarHeight: 50),
         body: Center(
           child: initPlayer
               ? AspectRatio(

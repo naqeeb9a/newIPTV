@@ -5,7 +5,6 @@ import 'package:bwciptv/IPTV/Views/AllChannels/all_channels.dart';
 import 'package:bwciptv/IPTV/Views/DetailPage/detail_page.dart';
 import 'package:bwciptv/Widgets/custom_search.dart';
 import 'package:bwciptv/Widgets/widget.dart';
-import 'package:bwciptv/utils/action_handler.dart';
 import 'package:bwciptv/utils/app_routes.dart';
 import 'package:bwciptv/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,9 @@ import 'package:provider/provider.dart';
 import '../../../Widgets/custom_loader.dart';
 
 class CategoriesListView extends StatefulWidget {
-  const CategoriesListView({Key? key}) : super(key: key);
+  final TextEditingValue textController;
+  const CategoriesListView({Key? key, required this.textController})
+      : super(key: key);
 
   @override
   State<CategoriesListView> createState() => _CategoriesListViewState();
@@ -23,58 +24,48 @@ class CategoriesListView extends StatefulWidget {
 
 class _CategoriesListViewState extends State<CategoriesListView> {
   final TextEditingController controller = TextEditingController();
-  // FocusNode? drawerList;
-  // FocusNode? searchAll;
-  // FocusNode? favouritesList;
-  // setFirstNode() {
-  //   if (drawerList == null) {
-  //     drawerList = FocusNode();
-  //     searchAll = FocusNode();
-  //     favouritesList = FocusNode();
-  //     FocusScope.of(context).requestFocus(drawerList);
-  //   }
-  // }
-
-  // changeFocusNode(BuildContext context, FocusNode node) {
-  //   FocusScope.of(context).requestFocus(node);
-  //   setState(() {});
-  // }
 
   @override
   void dispose() {
     controller.dispose();
-    // drawerList!.dispose();
-    // searchAll!.dispose();
-    // favouritesList!.dispose();
+
     super.dispose();
   }
 
   @override
+  void initState() {
+    controller.value = widget.textController;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // setFirstNode();
     IPTVModelView iptvModelView = context.watch<IPTVModelView>();
-    return ActionHandler().handleArrowEnterActions(
-      child: Scaffold(
-        appBar: BaseAppBar(
-            title: "Categories",
-            appBar: AppBar(),
-            widgets: [
-              InkWell(
-                onTap: () {
-                  KRoutes.push(context, const AllChannels());
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(5),
-                  child: const Icon(
-                    Icons.search,
-                    color: kblack,
-                  ),
+    return Scaffold(
+      appBar: BaseAppBar(
+          title: "Categories",
+          appBar: AppBar(),
+          widgets: [
+            InkWell(
+              onTap: () {
+                KRoutes.push(context, const AllChannels());
+              },
+              child: Container(
+                padding: const EdgeInsets.all(5),
+                child: const Icon(
+                  Icons.search,
+                  color: kblack,
                 ),
               ),
-            ],
-            automaticallyImplyLeading: true,
-            appBarHeight: 50),
-        body: SafeArea(
+            ),
+          ],
+          automaticallyImplyLeading: true,
+          appBarHeight: 50),
+      body: RawKeyboardListener(
+        autofocus: true,
+        focusNode: FocusNode(),
+     
+        child: SafeArea(
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
               if (constraints.maxWidth > 900) {
@@ -222,6 +213,15 @@ class _CategoriesListViewState extends State<CategoriesListView> {
             function: () {
               setState(() {});
             },
+            onSubmitted: (value) {
+              KRoutes.pop(context);
+
+              KRoutes.push(
+                  context,
+                  CategoriesListView(
+                    textController: TextEditingValue(text: value),
+                  ));
+            },
           ),
         ),
         Expanded(
@@ -234,8 +234,17 @@ class _CategoriesListViewState extends State<CategoriesListView> {
               return InkWell(
                 onTap: () => KRoutes.push(
                     context,
-                    DetailPage(
-                      playList: iptvModelView.playList[value],
+                    Scaffold(
+                      appBar: BaseAppBar(
+                          title: value == "" ? "Undefined" : value,
+                          appBar: AppBar(),
+                          automaticallyImplyLeading: true,
+                          widgets: const [],
+                          appBarHeight: 50),
+                      body: DetailPage(
+                        playList: iptvModelView.playList[value],
+                        textEditingValue: const TextEditingValue(),
+                      ),
                     )),
                 child: Container(
                   padding: const EdgeInsets.all(10),

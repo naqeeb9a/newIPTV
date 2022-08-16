@@ -7,12 +7,14 @@ class CustomSearch extends StatelessWidget {
   final TextEditingController? controller;
   final String? searchText;
   final dynamic function;
+  final void Function(String)? onSubmitted;
   const CustomSearch(
       {Key? key,
       this.enabled = true,
       this.controller,
       this.function,
-      this.searchText})
+      this.searchText,
+      this.onSubmitted})
       : super(key: key);
 
   @override
@@ -33,15 +35,15 @@ class CustomSearch extends StatelessWidget {
           ),
           Expanded(
               child: TextField(
-            enabled: enabled,
-            controller: controller,
-            decoration: InputDecoration(
-                hintText: searchText ?? "Search anything",
-                border: InputBorder.none),
-            onChanged: (value) async {
-              await function();
-            },
-          ))
+                  enabled: enabled,
+                  controller: controller,
+                  decoration: InputDecoration(
+                      hintText: searchText ?? "Search anything",
+                      border: InputBorder.none),
+                  onChanged: (value) async {
+                    await function();
+                  },
+                  onSubmitted: onSubmitted))
         ],
       ),
     );

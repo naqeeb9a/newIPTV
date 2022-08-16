@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:bwciptv/Functionality/functionality.dart';
 import 'package:bwciptv/IPTV/ViewModel/FavouriteChannel/favourities_channel.dart';
+import 'package:bwciptv/IPTV/Views/AllChannels/all_channels.dart';
 import 'package:bwciptv/IPTV/Views/Categories/categories_view.dart';
 import 'package:bwciptv/IPTV/Views/DetailPage/detail_page.dart';
 import 'package:bwciptv/Widgets/widget.dart';
@@ -49,7 +50,11 @@ class _FavouritiesState extends State<Favourities> {
           widgets: [
             InkWell(
               onTap: () {
-                KRoutes.push(context, const CategoriesListView());
+                KRoutes.push(
+                    context,
+                    const CategoriesListView(
+                      textController: TextEditingValue(),
+                    ));
               },
               child: Container(
                 padding: const EdgeInsets.all(15),
@@ -58,7 +63,19 @@ class _FavouritiesState extends State<Favourities> {
                   color: kblack,
                 ),
               ),
-            )
+            ),
+            InkWell(
+              onTap: () {
+                KRoutes.push(context, const AllChannels());
+              },
+              child: Container(
+                padding: const EdgeInsets.all(15),
+                child: const Icon(
+                  LineIcons.search,
+                  color: kblack,
+                ),
+              ),
+            ),
           ],
           appBarHeight: 50),
       drawer: const Drawer(child: CustomDrawer()),
@@ -69,42 +86,45 @@ class _FavouritiesState extends State<Favourities> {
             controller,
             null,
           );
-          // context.read<FavouritiesModelView>().assignFavList();
         },
         child: const Icon(Icons.add),
       ),
-      body: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          if (constraints.maxWidth > 900) {
-            return favouritesView(
-                favList,
-                MediaQuery.of(context).size.width *
-                    0.5 /
-                    MediaQuery.of(context).size.width *
-                    2,
-                6);
-          }
-          if (constraints.maxWidth > 600) {
-            return favouritesView(
-                favList,
-                MediaQuery.of(context).size.width *
-                    0.5 /
-                    MediaQuery.of(context).size.width *
-                    1.5,
-                5);
-          }
-          if (constraints.maxWidth < 350) {
-            return favouritesView(
-                favList,
-                MediaQuery.of(context).size.width *
-                    0.5 /
-                    MediaQuery.of(context).size.width *
-                    1,
-                2);
-          }
+      body: RawKeyboardListener(
+        autofocus: true,
+        focusNode: FocusNode(),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            if (constraints.maxWidth > 900) {
+              return favouritesView(
+                  favList,
+                  MediaQuery.of(context).size.width *
+                      0.5 /
+                      MediaQuery.of(context).size.width *
+                      2,
+                  6);
+            }
+            if (constraints.maxWidth > 600) {
+              return favouritesView(
+                  favList,
+                  MediaQuery.of(context).size.width *
+                      0.5 /
+                      MediaQuery.of(context).size.width *
+                      1.5,
+                  5);
+            }
+            if (constraints.maxWidth < 350) {
+              return favouritesView(
+                  favList,
+                  MediaQuery.of(context).size.width *
+                      0.5 /
+                      MediaQuery.of(context).size.width *
+                      1,
+                  2);
+            }
 
-          return favouritesView(favList, 16 / 20, 3);
-        },
+            return favouritesView(favList, 16 / 20, 3);
+          },
+        ),
       ),
     );
   }
@@ -143,7 +163,19 @@ class _FavouritiesState extends State<Favourities> {
         final updatedValue = favList.keys.toList()[index];
         return InkWell(
           onTap: () {
-            KRoutes.push(context, DetailPage(playList: favList[updatedValue]));
+            KRoutes.push(
+                context,
+                Scaffold(
+                    appBar: BaseAppBar(
+                        title: updatedValue,
+                        appBar: AppBar(),
+                        automaticallyImplyLeading: true,
+                        widgets: const [],
+                        appBarHeight: 50),
+                    body: DetailPage(
+                      playList: favList[updatedValue],
+                      textEditingValue: const TextEditingValue(),
+                    )));
           },
           onLongPress: () {
             Widget cancelButton = TextButton(
@@ -174,43 +206,46 @@ class _FavouritiesState extends State<Favourities> {
               },
             );
           },
-          child: Stack(
-            children: [
-              ShaderMask(
-                shaderCallback: (bound) {
-                  return LinearGradient(
-                      end: FractionalOffset.topCenter,
-                      begin: FractionalOffset.bottomCenter,
-                      colors: [
-                        Colors.black.withOpacity(0.99),
-                        Colors.black.withOpacity(0.7),
-                        Colors.transparent,
-                      ],
-                      stops: const [
-                        0.0,
-                        0.3,
-                        0.45
-                      ]).createShader(bound);
-                },
-                blendMode: BlendMode.srcOver,
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: changedColor),
-                  alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Stack(
+              children: [
+                ShaderMask(
+                  shaderCallback: (bound) {
+                    return LinearGradient(
+                        end: FractionalOffset.topCenter,
+                        begin: FractionalOffset.bottomCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.99),
+                          Colors.black.withOpacity(0.7),
+                          Colors.transparent,
+                        ],
+                        stops: const [
+                          0.0,
+                          0.3,
+                          0.45
+                        ]).createShader(bound);
+                  },
+                  blendMode: BlendMode.srcOver,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: changedColor),
+                    alignment: Alignment.bottomCenter,
+                  ),
                 ),
-              ),
-              Positioned(
-                  bottom: 20,
-                  left: 10,
-                  right: 10,
-                  child: CustomText(
-                    text: updatedValue,
-                    fontsize: 30,
-                    color: kWhite,
-                    textAlign: TextAlign.center,
-                  ))
-            ],
+                Positioned(
+                    bottom: 20,
+                    left: 10,
+                    right: 10,
+                    child: CustomText(
+                      text: updatedValue,
+                      fontsize: 30,
+                      color: kWhite,
+                      textAlign: TextAlign.center,
+                    ))
+              ],
+            ),
           ),
         );
       },
