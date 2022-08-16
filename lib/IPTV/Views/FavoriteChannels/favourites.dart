@@ -4,15 +4,18 @@ import 'dart:math';
 
 import 'package:bwciptv/Functionality/functionality.dart';
 import 'package:bwciptv/IPTV/ViewModel/FavouriteChannel/favourities_channel.dart';
+import 'package:bwciptv/IPTV/Views/Categories/categories_view.dart';
 import 'package:bwciptv/IPTV/Views/DetailPage/detail_page.dart';
 import 'package:bwciptv/Widgets/widget.dart';
 import 'package:bwciptv/utils/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:m3u_nullsafe/m3u_nullsafe.dart';
 
 import '../../../utils/utils.dart';
+import '../Drawer/drawer.dart';
 
 class Favourities extends StatefulWidget {
   const Favourities({Key? key}) : super(key: key);
@@ -21,6 +24,8 @@ class Favourities extends StatefulWidget {
   State<Favourities> createState() => _FavouritiesState();
 }
 
+final GlobalKey<ScaffoldState> _key = GlobalKey();
+
 class _FavouritiesState extends State<Favourities> {
   final TextEditingController controller = TextEditingController();
   @override
@@ -28,12 +33,35 @@ class _FavouritiesState extends State<Favourities> {
     Map<String, List<M3uGenericEntry?>> favList =
         context.watch<FavouritiesModelView>().favouriteList;
     return Scaffold(
+      key: _key,
       appBar: BaseAppBar(
           title: "Favourites",
-          appBar: AppBar(),
+          leading: InkWell(
+              onTap: () {
+                _key.currentState!.openDrawer();
+              },
+              child: const Icon(
+                Icons.menu,
+                color: kblack,
+              )),
           automaticallyImplyLeading: true,
-          widgets: const [],
+          appBar: AppBar(),
+          widgets: [
+            InkWell(
+              onTap: () {
+                KRoutes.push(context, const CategoriesListView());
+              },
+              child: Container(
+                padding: const EdgeInsets.all(15),
+                child: const Icon(
+                  LineIcons.television,
+                  color: kblack,
+                ),
+              ),
+            )
+          ],
           appBarHeight: 50),
+      drawer: const Drawer(child: CustomDrawer()),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Functionality().showAddingCategory(

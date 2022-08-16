@@ -119,8 +119,8 @@ class Functionality {
 
   showDialogueFav(BuildContext context, TextEditingController? controller,
       M3uGenericEntry? item) {
-    Map favList =
-        Provider.of<FavouritiesModelView>(context, listen: false).favouriteList;
+    Map<String, List<M3uGenericEntry?>> favList =
+        context.read<FavouritiesModelView>().favouriteList;
     return favList.isEmpty
         ? showAddingCategory(context, controller, item)
         : showDialog(
@@ -143,32 +143,36 @@ class Functionality {
                           borderRadius: BorderRadius.circular(20)),
                       height: MediaQuery.of(context).size.height / 2,
                       width: MediaQuery.of(context).size.width,
-                      child: ListView.separated(
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: CustomText(
-                                text:
-                                    "${index + 1} - ${favList.keys.toList()[index]}",
-                                fontsize: 18,
-                              ),
-                              onTap: () {
-                                Provider.of<FavouritiesModelView>(context,
-                                        listen: false)
-                                    .addToFavourities(
-                                  favList.keys.toList()[index],
-                                  item,
-                                );
-                                KRoutes.pop(context);
-                                Fluttertoast.showToast(
-                                    msg: "Added to favourites");
-                              },
-                              enableFeedback: true,
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return const Divider();
-                          },
-                          itemCount: favList.keys.toList().length)),
+                      child: Builder(builder: (context1) {
+                        Map<String, List<M3uGenericEntry?>> favList2 =
+                            context.watch<FavouritiesModelView>().favouriteList;
+                        return ListView.separated(
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: CustomText(
+                                  text:
+                                      "${index + 1} - ${favList2.keys.toList()[index]}",
+                                  fontsize: 18,
+                                ),
+                                onTap: () {
+                                  Provider.of<FavouritiesModelView>(context,
+                                          listen: false)
+                                      .addToFavourities(
+                                    favList2.keys.toList()[index],
+                                    item,
+                                  );
+                                  KRoutes.pop(context);
+                                  Fluttertoast.showToast(
+                                      msg: "Added to favourites");
+                                },
+                                enableFeedback: true,
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return const Divider();
+                            },
+                            itemCount: favList2.keys.toList().length);
+                      })),
                 ));
   }
 

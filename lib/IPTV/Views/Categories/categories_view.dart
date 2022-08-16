@@ -3,8 +3,6 @@ import 'dart:math';
 import 'package:bwciptv/IPTV/ViewModel/IPTVModelView/iptv_model_view.dart';
 import 'package:bwciptv/IPTV/Views/AllChannels/all_channels.dart';
 import 'package:bwciptv/IPTV/Views/DetailPage/detail_page.dart';
-import 'package:bwciptv/IPTV/Views/Drawer/drawer.dart';
-import 'package:bwciptv/IPTV/Views/FavoriteChannels/favourites.dart';
 import 'package:bwciptv/Widgets/custom_search.dart';
 import 'package:bwciptv/Widgets/widget.dart';
 import 'package:bwciptv/utils/action_handler.dart';
@@ -22,8 +20,6 @@ class CategoriesListView extends StatefulWidget {
   @override
   State<CategoriesListView> createState() => _CategoriesListViewState();
 }
-
-final GlobalKey<ScaffoldState> _key = GlobalKey();
 
 class _CategoriesListViewState extends State<CategoriesListView> {
   final TextEditingController controller = TextEditingController();
@@ -59,7 +55,6 @@ class _CategoriesListViewState extends State<CategoriesListView> {
     IPTVModelView iptvModelView = context.watch<IPTVModelView>();
     return ActionHandler().handleArrowEnterActions(
       child: Scaffold(
-        key: _key,
         appBar: BaseAppBar(
             title: "Categories",
             appBar: AppBar(),
@@ -76,30 +71,9 @@ class _CategoriesListViewState extends State<CategoriesListView> {
                   ),
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  KRoutes.push(context, const Favourities());
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(5),
-                  child: const Icon(
-                    Icons.favorite_outline,
-                    color: kblack,
-                  ),
-                ),
-              ),
             ],
             automaticallyImplyLeading: true,
-            leading: InkWell(
-                onTap: () {
-                  _key.currentState!.openDrawer();
-                },
-                child: const Icon(
-                  Icons.menu,
-                  color: kblack,
-                )),
             appBarHeight: 50),
-        drawer: const Drawer(child: CustomDrawer()),
         body: SafeArea(
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
