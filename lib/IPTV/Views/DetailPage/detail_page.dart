@@ -16,12 +16,14 @@ import '../PlayerScreen/player_screen_copy.dart';
 class DetailPage extends StatefulWidget {
   final TextEditingValue textEditingValue;
   final List<M3uGenericEntry?>? playList;
+  final bool isFav;
 
-  const DetailPage({
-    Key? key,
-    required this.playList,
-    required this.textEditingValue,
-  }) : super(key: key);
+  const DetailPage(
+      {Key? key,
+      required this.playList,
+      required this.textEditingValue,
+      this.isFav = false})
+      : super(key: key);
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -50,7 +52,6 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       body: RawKeyboardListener(
         autofocus: true,
-      
         focusNode: FocusNode(),
         child: SafeArea(
           child: LayoutBuilder(
@@ -118,35 +119,36 @@ class _DetailPageState extends State<DetailPage> {
     channelsList = suggestions;
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child: CustomSearch(
-            controller: controller,
-            searchText: "Search Channels",
-            function: () {
-              setState(() {});
-            },
-            onSubmitted: (value) {
-              KRoutes.pop(context);
+        if (!widget.isFav)
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: CustomSearch(
+              controller: controller,
+              searchText: "Search Channels",
+              function: () {
+                setState(() {});
+              },
+              onSubmitted: (value) {
+                KRoutes.pop(context);
 
-              KRoutes.push(
-                  context,
-                  Scaffold(
-                    appBar: BaseAppBar(
-                      title: "Channel's List",
-                      appBar: AppBar(),
-                      widgets: const [],
-                      appBarHeight: 50,
-                      automaticallyImplyLeading: true,
-                    ),
-                    body: DetailPage(
-                      textEditingValue: TextEditingValue(text: value),
-                      playList: widget.playList,
-                    ),
-                  ));
-            },
+                KRoutes.push(
+                    context,
+                    Scaffold(
+                      appBar: BaseAppBar(
+                        title: "Channel's List",
+                        appBar: AppBar(),
+                        widgets: const [],
+                        appBarHeight: 50,
+                        automaticallyImplyLeading: true,
+                      ),
+                      body: DetailPage(
+                        textEditingValue: TextEditingValue(text: value),
+                        playList: widget.playList,
+                      ),
+                    ));
+              },
+            ),
           ),
-        ),
         Expanded(
           child: GridView.builder(
             itemCount: channelsList.length,
@@ -233,24 +235,25 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      if (containsValue) {
-                        context
-                            .read<FavouritiesModelView>()
-                            .removeFromFavourities(value);
-                        Fluttertoast.showToast(
-                            msg: "Removed from Favouritites");
-                      } else {
-                        Functionality()
-                            .showDialogueFav(context, catController, value);
-                      }
-                    },
-                    child: Icon(
-                      containsValue ? Icons.favorite : Icons.favorite_outline,
-                      color: containsValue ? Colors.red : kblack,
-                    ),
-                  )
+                  if (!widget.isFav)
+                    InkWell(
+                      onTap: () {
+                        if (containsValue) {
+                          context
+                              .read<FavouritiesModelView>()
+                              .removeFromFavourities(value);
+                          Fluttertoast.showToast(
+                              msg: "Removed from Favouritites");
+                        } else {
+                          Functionality()
+                              .showDialogueFav(context, catController, value);
+                        }
+                      },
+                      child: Icon(
+                        containsValue ? Icons.favorite : Icons.favorite_outline,
+                        color: containsValue ? Colors.red : kblack,
+                      ),
+                    )
                 ],
               );
             },

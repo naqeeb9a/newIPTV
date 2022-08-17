@@ -174,6 +174,7 @@ class _FavouritiesState extends State<Favourities> {
                         appBarHeight: 50),
                     body: DetailPage(
                       playList: favList[updatedValue],
+                      isFav: true,
                       textEditingValue: const TextEditingValue(),
                     )));
           },
