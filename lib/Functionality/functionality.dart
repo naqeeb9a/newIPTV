@@ -30,9 +30,9 @@ class Functionality {
                   const SizedBox(
                     height: 20,
                   ),
-                  FormTextField(
+                  TextField(
                       controller: controller,
-                      suffixIcon: const Icon(Icons.link)),
+                      textInputAction: TextInputAction.go),
                   const SizedBox(
                     height: 20,
                   ),
@@ -209,9 +209,9 @@ class Functionality {
                 const SizedBox(
                   height: 20,
                 ),
-                FormTextField(
+                TextField(
                   controller: controller,
-                  suffixIcon: const Icon(Icons.link),
+                  textInputAction: TextInputAction.go,
                   onSubmitted: (value) {
                     if (controller!.text.isEmpty) {
                       Fluttertoast.showToast(msg: "Field cannot be empty");

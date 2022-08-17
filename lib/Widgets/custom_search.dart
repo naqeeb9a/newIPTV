@@ -35,6 +35,7 @@ class CustomSearch extends StatelessWidget {
           ),
           Expanded(
               child: TextField(
+            textInputAction: TextInputAction.go,
             enabled: enabled,
             controller: controller,
             decoration: InputDecoration(

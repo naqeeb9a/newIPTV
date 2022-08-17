@@ -20,7 +20,7 @@ class PlayerScreen extends StatefulWidget {
 class _PlayerScreenState extends State<PlayerScreen> {
   late int basicIndex;
   bool initPlayer = false;
-
+  bool isScreenMounted = true;
   late BetterPlayerController _betterPlayerController;
 
   @override
@@ -58,8 +58,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
         ),
         betterPlayerDataSource: betterPlayerDataSource);
     _betterPlayerController.setVolume(1);
-    Fluttertoast.showToast(
-        msg: "Now Playing ${widget.playList![basicIndex]!.title}");
+    if (isScreenMounted) {
+      Fluttertoast.showToast(
+          msg: "Now Playing ${widget.playList![basicIndex]!.title}");
+    }
     setState(() {
       initPlayer = true;
     });
@@ -68,10 +70,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
   Future<void> onKey(RawKeyEvent e) async {
     if (e.runtimeType == RawKeyDownEvent) {
       if (e.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
-        backward();
+        if (isScreenMounted) {
+          backward();
+        }
       }
       if (e.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
-        forward();
+        if (isScreenMounted) {
+          forward();
+        }
       }
       if (e.isKeyPressed(LogicalKeyboardKey.select)) {
         setState(() {
@@ -131,18 +137,21 @@ class _PlayerScreenState extends State<PlayerScreen> {
       _betterPlayerController = BetterPlayerController(
           const BetterPlayerConfiguration(
             autoPlay: true,
-            // fullScreenByDefault: true,
             controlsConfiguration: BetterPlayerControlsConfiguration(),
           ),
           betterPlayerDataSource: betterPlayerDataSource)
         ..setVolume(1);
     });
-    Fluttertoast.showToast(
-        msg: "Now Playing ${widget.playList![basicIndex]!.title}");
+    if (isScreenMounted) {
+      Fluttertoast.showToast(
+          msg: "Now Playing ${widget.playList![basicIndex]!.title}");
+    }
     Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        initPlayer = true;
-      });
+      if (isScreenMounted) {
+        setState(() {
+          initPlayer = true;
+        });
+      }
     });
   }
 
@@ -183,73 +192,62 @@ class _PlayerScreenState extends State<PlayerScreen> {
       _betterPlayerController = BetterPlayerController(
           const BetterPlayerConfiguration(
             autoPlay: true,
-            // fullScreenByDefault: true,
             controlsConfiguration: BetterPlayerControlsConfiguration(),
           ),
           betterPlayerDataSource: betterPlayerDataSource)
         ..setVolume(1);
     });
-    Fluttertoast.showToast(
-        msg: "Now Playing ${widget.playList![basicIndex]!.title}");
+    if (isScreenMounted) {
+      Fluttertoast.showToast(
+          msg: "Now Playing ${widget.playList![basicIndex]!.title}");
+    }
     Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        initPlayer = true;
-      });
+      if (isScreenMounted) {
+        setState(() {
+          initPlayer = true;
+        });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
-      autofocus: true,
-      focusNode: FocusNode(),
-      onKey: onKey,
-      child: Scaffold(
-        backgroundColor: kblack,
-        // appBar: BaseAppBar(
-        //     title: widget.playList![basicIndex]!.title,
-        //     appBar: AppBar(),
-        //     widgets: [
-        //       GestureDetector(
-        //         onTap: () {
-        //           backward();
-        //         },
-        //         child: Container(
-        //           padding: const EdgeInsets.only(right: 20),
-        //           child: const Icon(
-        //             LineIcons.backward,
-        //             color: kWhite,
-        //           ),
-        //         ),
-        //       ),
-        //       GestureDetector(
-        //         onTap: () {
-        //           forward();
-        //         },
-        //         child: Container(
-        //           padding: const EdgeInsets.only(right: 20, left: 20),
-        //           child: const Icon(
-        //             LineIcons.forward,
-        //             color: kWhite,
-        //           ),
-        //         ),
-        //       )
-        //     ],
-        //     automaticallyImplyLeading: true,
-        //     textColor: kWhite,
-        //     centerTitle: false,
-        //     appBarHeight: 50),
-        body: Center(
-          child: initPlayer
-              ? AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: BetterPlayer(
-                    controller: _betterPlayerController,
-                  ),
-                )
-              : const CircularProgressIndicator(),
+    return GestureDetector(
+      onHorizontalDragEnd: (dragDetail) {
+        if (dragDetail.velocity.pixelsPerSecond.dx < -2) {
+          if (isScreenMounted) {
+            backward();
+          }
+        } else if (dragDetail.velocity.pixelsPerSecond.dx > 2) {
+          if (isScreenMounted) {
+            forward();
+          }
+        }
+      },
+      child: RawKeyboardListener(
+        autofocus: true,
+        focusNode: FocusNode(),
+        onKey: onKey,
+        child: Scaffold(
+          backgroundColor: kblack,
+          body: Center(
+            child: initPlayer
+                ? AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: BetterPlayer(
+                      controller: _betterPlayerController,
+                    ),
+                  )
+                : const CircularProgressIndicator(),
+          ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    isScreenMounted = false;
+    super.dispose();
   }
 }
