@@ -50,43 +50,39 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RawKeyboardListener(
-        autofocus: true,
-        focusNode: FocusNode(),
-        child: SafeArea(
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              if (constraints.maxWidth > 900) {
-                return chanelsListView(
-                    context,
-                    MediaQuery.of(context).size.width *
-                        0.5 /
-                        MediaQuery.of(context).size.width *
-                        1,
-                    5);
-              }
-              if (constraints.maxWidth > 600) {
-                return chanelsListView(
-                    context,
-                    MediaQuery.of(context).size.width *
-                        0.5 /
-                        MediaQuery.of(context).size.width *
-                        1,
-                    4);
-              }
-              if (constraints.maxWidth < 350) {
-                return chanelsListView(
-                    context,
-                    MediaQuery.of(context).size.width *
-                        0.5 /
-                        MediaQuery.of(context).size.width *
-                        1,
-                    3);
-              }
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            if (constraints.maxWidth > 900) {
+              return chanelsListView(
+                  context,
+                  MediaQuery.of(context).size.width *
+                      0.5 /
+                      MediaQuery.of(context).size.width *
+                      1,
+                  5);
+            }
+            if (constraints.maxWidth > 600) {
+              return chanelsListView(
+                  context,
+                  MediaQuery.of(context).size.width *
+                      0.5 /
+                      MediaQuery.of(context).size.width *
+                      1,
+                  4);
+            }
+            if (constraints.maxWidth < 350) {
+              return chanelsListView(
+                  context,
+                  MediaQuery.of(context).size.width *
+                      0.5 /
+                      MediaQuery.of(context).size.width *
+                      1,
+                  3);
+            }
 
-              return chanelsListView(context, 16 / 25, 3);
-            },
-          ),
+            return chanelsListView(context, 16 / 25, 3);
+          },
         ),
       ),
     );

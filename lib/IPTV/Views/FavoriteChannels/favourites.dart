@@ -89,42 +89,38 @@ class _FavouritiesState extends State<Favourities> {
         },
         child: const Icon(Icons.add),
       ),
-      body: RawKeyboardListener(
-        autofocus: true,
-        focusNode: FocusNode(),
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            if (constraints.maxWidth > 900) {
-              return favouritesView(
-                  favList,
-                  MediaQuery.of(context).size.width *
-                      0.5 /
-                      MediaQuery.of(context).size.width *
-                      2,
-                  6);
-            }
-            if (constraints.maxWidth > 600) {
-              return favouritesView(
-                  favList,
-                  MediaQuery.of(context).size.width *
-                      0.5 /
-                      MediaQuery.of(context).size.width *
-                      1.5,
-                  5);
-            }
-            if (constraints.maxWidth < 350) {
-              return favouritesView(
-                  favList,
-                  MediaQuery.of(context).size.width *
-                      0.5 /
-                      MediaQuery.of(context).size.width *
-                      1,
-                  2);
-            }
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          if (constraints.maxWidth > 900) {
+            return favouritesView(
+                favList,
+                MediaQuery.of(context).size.width *
+                    0.5 /
+                    MediaQuery.of(context).size.width *
+                    2,
+                6);
+          }
+          if (constraints.maxWidth > 600) {
+            return favouritesView(
+                favList,
+                MediaQuery.of(context).size.width *
+                    0.5 /
+                    MediaQuery.of(context).size.width *
+                    1.5,
+                5);
+          }
+          if (constraints.maxWidth < 350) {
+            return favouritesView(
+                favList,
+                MediaQuery.of(context).size.width *
+                    0.5 /
+                    MediaQuery.of(context).size.width *
+                    1,
+                2);
+          }
 
-            return favouritesView(favList, 16 / 20, 3);
-          },
-        ),
+          return favouritesView(favList, 16 / 20, 3);
+        },
       ),
     );
   }

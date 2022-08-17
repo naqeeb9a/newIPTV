@@ -61,57 +61,52 @@ class _CategoriesListViewState extends State<CategoriesListView> {
           ],
           automaticallyImplyLeading: true,
           appBarHeight: 50),
-      body: RawKeyboardListener(
-        autofocus: true,
-        focusNode: FocusNode(),
-     
-        child: SafeArea(
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              if (constraints.maxWidth > 900) {
-                return categoriesView(
-                    iptvModelView,
-                    context,
-                    MediaQuery.of(context).size.width *
-                        0.5 /
-                        MediaQuery.of(context).size.width *
-                        2,
-                    6);
-              }
-              if (constraints.maxWidth > 700) {
-                return categoriesView(
-                    iptvModelView,
-                    context,
-                    MediaQuery.of(context).size.width *
-                        0.5 /
-                        MediaQuery.of(context).size.width *
-                        1.7,
-                    4);
-              }
-              if (constraints.maxWidth > 400) {
-                return categoriesView(
-                    iptvModelView,
-                    context,
-                    MediaQuery.of(context).size.width *
-                        0.5 /
-                        MediaQuery.of(context).size.width *
-                        1.7,
-                    2);
-              }
-              if (constraints.maxWidth < 350) {
-                return categoriesView(
-                    iptvModelView,
-                    context,
-                    MediaQuery.of(context).size.width *
-                        0.5 /
-                        MediaQuery.of(context).size.width *
-                        1,
-                    2);
-              }
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            if (constraints.maxWidth > 900) {
+              return categoriesView(
+                  iptvModelView,
+                  context,
+                  MediaQuery.of(context).size.width *
+                      0.5 /
+                      MediaQuery.of(context).size.width *
+                      2,
+                  6);
+            }
+            if (constraints.maxWidth > 700) {
+              return categoriesView(
+                  iptvModelView,
+                  context,
+                  MediaQuery.of(context).size.width *
+                      0.5 /
+                      MediaQuery.of(context).size.width *
+                      1.7,
+                  4);
+            }
+            if (constraints.maxWidth > 400) {
+              return categoriesView(
+                  iptvModelView,
+                  context,
+                  MediaQuery.of(context).size.width *
+                      0.5 /
+                      MediaQuery.of(context).size.width *
+                      1.7,
+                  2);
+            }
+            if (constraints.maxWidth < 350) {
+              return categoriesView(
+                  iptvModelView,
+                  context,
+                  MediaQuery.of(context).size.width *
+                      0.5 /
+                      MediaQuery.of(context).size.width *
+                      1,
+                  2);
+            }
 
-              return categoriesView(iptvModelView, context, 16 / 15, 2);
-            },
-          ),
+            return categoriesView(iptvModelView, context, 16 / 15, 2);
+          },
         ),
       ),
     );

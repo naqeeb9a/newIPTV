@@ -35,15 +35,15 @@ class CustomSearch extends StatelessWidget {
           ),
           Expanded(
               child: TextField(
-                  enabled: enabled,
-                  controller: controller,
-                  decoration: InputDecoration(
-                      hintText: searchText ?? "Search anything",
-                      border: InputBorder.none),
-                  onChanged: (value) async {
-                    await function();
-                  },
-                  onSubmitted: onSubmitted))
+            enabled: enabled,
+            controller: controller,
+            decoration: InputDecoration(
+                hintText: searchText ?? "Search anything",
+                border: InputBorder.none),
+            onChanged: (value) async {
+              await function();
+            },
+          ))
         ],
       ),
     );
