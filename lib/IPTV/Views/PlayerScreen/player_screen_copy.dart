@@ -53,7 +53,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
     _betterPlayerController = BetterPlayerController(
         const BetterPlayerConfiguration(
           autoPlay: true,
-          // fullScreenByDefault: true,
           controlsConfiguration: BetterPlayerControlsConfiguration(),
         ),
         betterPlayerDataSource: betterPlayerDataSource);
